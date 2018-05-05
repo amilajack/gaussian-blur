@@ -3,7 +3,8 @@ import createShader from 'gl-shader';
 import createFBO from 'gl-fbo';
 import glslify from 'glslify';
 import loop from 'raf-loop';
-
+import vertexShader from './vert.glsl';
+import fragmentShader from './frag.glsl'
 
 let gl;
 
@@ -50,7 +51,7 @@ function start(err, image) {
 
   const texture = require('gl-texture2d')(gl, image);
 
-  const shader = createShader(gl, glslify('./vert.glsl'), glslify('./frag.glsl'));
+  const shader = createShader(gl, vertexShader, fragmentShader);
   shader.bind();
   shader.uniforms.iResolution = [width, height, 0];
   shader.uniforms.iChannel0 = 0;
@@ -110,6 +111,8 @@ function start(err, image) {
   }
 
   function setParameters(texture) {
+    // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
+    //        different images sizes that are not powers of 2
     // texture.wrapS = texture.wrapT = gl.REPEAT
     texture.minFilter = gl.LINEAR;
     texture.magFilter = gl.LINEAR;

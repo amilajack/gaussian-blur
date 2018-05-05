@@ -4,7 +4,9 @@ export default coefficients;
 
 // a row of a pascal table with ends chopped off
 function coefficients(weights) {
-  if (weights.length % 2 === 0) { throw new Error('only supports odd table'); }
+  if (weights.length % 2 === 0) {
+    throw new Error('only supports odd table');
+  }
 
   console.log('taps', weights.length);
   const mid = Math.floor((weights.length - 1) / 2);
