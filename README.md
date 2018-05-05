@@ -40,7 +40,7 @@ Since this is separable, you will need multiple passes to blur an image in both 
 
 Use [npm](https://www.npmjs.com/) to install and [glslify](https://github.com/stackgl/glslify) to consume the function in your shaders.
 
-```sh
+```bash
 # npm
 npm install @amilajack/glsl-fast-gaussian-blur
 # yarn
