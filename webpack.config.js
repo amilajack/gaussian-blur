@@ -13,7 +13,7 @@ const developmentConfig = {
       { test: /\.(glsl|frag|vert)$/, loader: 'glslify', exclude: /node_modules/ }
     ]
   }
-}
+};
 
 const productionConfig = {
   mode: 'production',
@@ -28,7 +28,7 @@ const productionConfig = {
       { test: /\.(glsl|frag|vert)$/, loader: 'glslify', exclude: /node_modules/ }
     ]
   }
-}
+};
 
 module.exports =
   process.env.NODE_ENV === 'production'

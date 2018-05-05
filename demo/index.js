@@ -4,7 +4,7 @@ import createFBO from 'gl-fbo';
 import glslify from 'glslify';
 import loop from 'raf-loop';
 import vertexShader from './vert.glsl';
-import fragmentShader from './frag.glsl'
+import fragmentShader from './frag.glsl';
 
 let gl;
 

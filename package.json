@@ -1,6 +1,6 @@
 {
   "name": "glsl-fast-gaussian-blur",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "optimized 9-tap gaussian blur for GLSL",
   "main": "./demo/index.js",
   "license": "MIT",
@@ -32,7 +32,8 @@
   },
   "scripts": {
     "start": "budo demo/index.js:bundle.js --live --verbose -t glslify | garnish",
-    "build": "webpack"
+    "build": "webpack",
+    "lint": "eslint ."
   },
   "files": [
     "demo"
