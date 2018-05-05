@@ -1,3 +1,6 @@
 {
-  "extends": "bliss"
+  "extends": "bliss",
+  "env": {
+    "browser": true
+  }
 }

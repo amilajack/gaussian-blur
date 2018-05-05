@@ -1,7 +1,6 @@
 import triangle from 'a-big-triangle';
 import createShader from 'gl-shader';
 import createFBO from 'gl-fbo';
-import glslify from 'glslify';
 import loop from 'raf-loop';
 import vertexShader from './vert.glsl';
 import fragmentShader from './frag.glsl';
@@ -17,8 +16,6 @@ function getBase64FromImageUrl(url) {
     const canvas = document.createElement('canvas');
     canvas.width = this.width;
     canvas.height = this.height;
-
-    console.log(this.width);
 
     gl = require('webgl-context')({
       width: this.width,
@@ -41,7 +38,7 @@ function getBase64FromImageUrl(url) {
   img.src = url;
 }
 
-getBase64FromImageUrl('./demo/demo.jpg');
+getBase64FromImageUrl('./demo.jpg');
 
 function start(err, image) {
   if (err) throw err;

@@ -2,12 +2,12 @@
   "name": "glsl-fast-gaussian-blur",
   "version": "2.0.0",
   "description": "optimized 9-tap gaussian blur for GLSL",
-  "main": "./demo/index.js",
+  "main": "./src/index.js",
   "license": "MIT",
   "author": {
-    "name": "Matt DesLauriers",
-    "email": "dave.des@gmail.com",
-    "url": "https://github.com/mattdesl"
+    "name": "Amila Welihinda",
+    "email": "amilajack@gmail.com",
+    "url": "https://github.com/amilajack"
   },
   "dependencies": {},
   "devDependencies": {
@@ -31,7 +31,7 @@
     "webpack-dev-server": "^3.1.4"
   },
   "scripts": {
-    "start": "budo demo/index.js:bundle.js --live --verbose -t glslify | garnish",
+    "start": "webpack-dev-server",
     "build": "webpack",
     "lint": "eslint ."
   },
