@@ -1,7 +1,9 @@
 glsl-fast-gaussian-blur
 =======================
 
-Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
+Oiptimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
+
+![demo](./img/demo.gif)
 
 ## Example
 
