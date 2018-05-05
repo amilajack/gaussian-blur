@@ -2,6 +2,9 @@ import triangle from 'a-big-triangle';
 import createShader from 'gl-shader';
 import createFBO from 'gl-fbo';
 import loop from 'raf-loop';
+import loadImage from 'load-img';
+import glTexture2d from 'gl-texture2d';
+import webglContext from 'webgl-context';
 import vertexShader from './vert.glsl';
 import fragmentShader from './frag.glsl';
 
@@ -17,7 +20,7 @@ function getBase64FromImageUrl(url) {
     canvas.width = this.width;
     canvas.height = this.height;
 
-    gl = require('webgl-context')({
+    gl = webglContext({
       width: this.width,
       height: this.height
     });
@@ -25,13 +28,8 @@ function getBase64FromImageUrl(url) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(this, 0, 0);
 
-    const dataURL = canvas.toDataURL('image/png');
+    const uri = canvas.toDataURL('image/png');
 
-    const uri = dataURL;
-    // const uri = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-
-    // var uri = require('./zoo')
-    const loadImage = require('load-img');
     loadImage(uri, start);
   };
 
@@ -46,7 +44,7 @@ function start(err, image) {
   const width = gl.drawingBufferWidth;
   const height = gl.drawingBufferHeight;
 
-  const texture = require('gl-texture2d')(gl, image);
+  const texture = glTexture2d(gl, image);
 
   const shader = createShader(gl, vertexShader, fragmentShader);
   shader.bind();
