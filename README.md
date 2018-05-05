@@ -1,10 +1,5 @@
-# glsl-fast-gaussian-blur
-
-[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
-
-[![demo](http://i.imgur.com/dfCyeqv.png)](http://jam3.github.io/glsl-fast-gaussian-blur/)
-
-[demo](http://jam3.github.io/glsl-fast-gaussian-blur/) - [source](./demo/index.js)
+glsl-fast-gaussian-blur
+=======================
 
 Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
 
@@ -40,7 +35,10 @@ Since this is separable, you will need multiple passes to blur an image in both 
 Use [npm](https://www.npmjs.com/) to install and [glslify](https://github.com/stackgl/glslify) to consume the function in your shaders.
 
 ```sh
-npm install glsl-fast-gaussian-blur --save
+# npm
+npm install @amilajack/glsl-fast-gaussian-blur
+# yarn
+yarn add @amilajack/glsl-fast-gaussian-blur
 ```
 
 ## Setup
@@ -63,4 +61,4 @@ Returns the blurred pixel color.
 
 ## Further Optimizations
 
-This can be further optimized on some devices (notably PowerVR) by using non-dependent texture reads. This can be done by calculating the texture coordinates in the vertex shader, and passing them as varyings to the fragment shader. This is left as an exercise for the reader to keep this module simple. You can read more about it [here](http://xissburg.com/faster-gaussian-blur-in-glsl/).
+I ran across an article that describes a [linear time gaussian blur](http://blog.ivank.net/fastest-gaussian-blur.html). This is worth investigating.
