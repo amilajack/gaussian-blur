@@ -56,8 +56,6 @@ yarn start
 
 ## Usage
 
-[![NPM](https://nodei.co/npm/glsl-fast-gaussian-blur.png)](https://www.npmjs.com/package/glsl-fast-gaussian-blur)
-
 #### `vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction)`
 
 Blurs the `image` from the specified `uv` coordinate, using the given `resolution` (size in pixels of screen) and `direction` -- typically either `[1, 0]` (horizontal) or `[0, 1]` (vertical).
