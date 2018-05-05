@@ -1,6 +1,12 @@
 {
-  "extends": "bliss",
+  "extends": [
+    "bliss",
+    "prettier"
+  ],
   "env": {
     "browser": true
+  },
+  "rules": {
+    "prettier/prettier": "error"
   }
 }

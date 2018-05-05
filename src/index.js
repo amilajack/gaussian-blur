@@ -1,22 +1,22 @@
-import triangle from 'a-big-triangle';
-import createShader from 'gl-shader';
-import createFBO from 'gl-fbo';
-import loop from 'raf-loop';
-import loadImage from 'load-img';
-import glTexture2d from 'gl-texture2d';
-import webglContext from 'webgl-context';
-import vertexShader from './vert.glsl';
-import fragmentShader from './frag.glsl';
+import triangle from "a-big-triangle";
+import createShader from "gl-shader";
+import createFBO from "gl-fbo";
+import loop from "raf-loop";
+import loadImage from "load-img";
+import glTexture2d from "gl-texture2d";
+import webglContext from "webgl-context";
+import vertexShader from "./vert.glsl";
+import fragmentShader from "./frag.glsl";
 
 let gl;
 
 function getBase64FromImageUrl(url) {
   const img = new Image();
 
-  img.setAttribute('crossOrigin', 'anonymous');
+  img.setAttribute("crossOrigin", "anonymous");
 
-  img.onload = function () {
-    const canvas = document.createElement('canvas');
+  img.onload = function() {
+    const canvas = document.createElement("canvas");
     canvas.width = this.width;
     canvas.height = this.height;
 
@@ -25,10 +25,10 @@ function getBase64FromImageUrl(url) {
       height: this.height
     });
     document.body.appendChild(gl.canvas);
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(this, 0, 0);
 
-    const uri = canvas.toDataURL('image/png');
+    const uri = canvas.toDataURL("image/png");
 
     loadImage(uri, start);
   };
@@ -36,7 +36,7 @@ function getBase64FromImageUrl(url) {
   img.src = url;
 }
 
-getBase64FromImageUrl('./demo.jpg');
+getBase64FromImageUrl("./demo.jpg");
 
 function start(err, image) {
   if (err) throw err;
@@ -66,7 +66,7 @@ function start(err, image) {
     time += dt / 1000;
     gl.viewport(0, 0, width, height);
 
-    const anim = (Math.sin(time) * 1.5);
+    const anim = Math.sin(time) * 1.5;
     // var anim = (Math.sin(time) * 0.5 + 0.5)
     const iterations = 8;
     let writeBuffer = fboA;

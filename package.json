@@ -25,8 +25,11 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-bliss": "^2.0.0-0",
+    "eslint-config-prettier": "^2.9.0",
     "glslify-loader": "^1.0.2",
+    "husky": "^1.0.0-rc.2",
     "lint-staged": "^7.0.5",
+    "prettier": "^1.12.1",
     "raw-loader": "^0.5.1",
     "webpack": "^4.7.0",
     "webpack-cli": "^2.1.2",
@@ -35,14 +38,21 @@
   "scripts": {
     "build": "webpack",
     "lint": "eslint . --ignore-path .gitignore",
-    "precommit": "lint-staged",
+    "lint-fix": "yarn lint --fix; exit 0",
     "preversion": "yarn build",
+    "postlint-fix": "prettier --single-quote --ignore-path .gitignore --single-quote --write '**/*.js'",
     "start": "webpack-dev-server",
-    "test": "yarn lint && yarn build"
+    "test": "yarn build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix --ignore-path .gitignore",
+      "yarn lint-fix",
+      "prettier --single-quote --ignore-path .gitignore --single-quote --write",
       "git add"
     ]
   },
