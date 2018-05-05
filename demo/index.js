@@ -4,16 +4,45 @@ var createFBO = require('gl-fbo')
 var glslify = require('glslify')
 var loop = require('raf-loop')
 
-var gl = require('webgl-context')({
-  width: 512,
-  height: 512
-})
 
-document.body.appendChild(gl.canvas)
 
-var uri = require('baboon-image-uri')
-var loadImage = require('load-img')
-loadImage(uri, start)
+var gl;
+
+function getBase64FromImageUrl(url) {
+    var img = new Image();
+
+    img.setAttribute('crossOrigin', 'anonymous');
+
+    img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width =this.width;
+        canvas.height =this.height;
+
+        console.log(this.width)
+
+         gl = require('webgl-context')({
+            width: this.width,
+            height: this.height
+          })
+          document.body.appendChild(gl.canvas)
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(this, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        const uri = dataURL;
+        // const uri = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
+        // var uri = require('./zoo')
+        var loadImage = require('load-img')
+        loadImage(uri, start)
+
+    };
+
+    img.src = url;
+}
+
+getBase64FromImageUrl('./demo/demo.jpg')
 
 function start (err, image) {
   if (err) throw err
@@ -43,7 +72,8 @@ function start (err, image) {
     time += dt / 1000
     gl.viewport(0, 0, width, height)
 
-    var anim = (Math.sin(time) * 0.5 + 0.5)
+    var anim = (Math.sin(time) * 1.5)
+    // var anim = (Math.sin(time) * 0.5 + 0.5)
     var iterations = 8
     var writeBuffer = fboA
     var readBuffer = fboB
@@ -82,7 +112,7 @@ function start (err, image) {
   }
 
   function setParameters (texture) {
-    texture.wrapS = texture.wrapT = gl.REPEAT
+    // texture.wrapS = texture.wrapT = gl.REPEAT
     texture.minFilter = gl.LINEAR
     texture.magFilter = gl.LINEAR
   }
