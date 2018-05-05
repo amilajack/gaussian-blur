@@ -9,40 +9,46 @@
     "email": "amilajack@gmail.com",
     "url": "https://github.com/amilajack"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "a-big-triangle": "^1.0.0",
     "array-range": "^1.0.1",
-    "baboon-image-uri": "^1.0.1",
     "canvas-loop": "^1.0.4",
-    "eslint": "^4.19.1",
-    "eslint-config-bliss": "^1.0.21",
     "gl-fbo": "^2.0.3",
     "gl-post": "^1.0.1",
     "gl-shader": "^4.0.1",
     "gl-texture2d": "^2.0.8",
-    "glslify-loader": "^1.0.2",
-    "lint-staged": "^7.0.5",
     "load-img": "^1.0.0",
     "raf-loop": "^1.1.0",
     "raw-loader": "^0.5.1",
-    "webgl-context": "^2.1.2",
+    "webgl-context": "^2.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-bliss": "^2.0.0-0",
+    "glslify-loader": "^1.0.2",
+    "lint-staged": "^7.0.5",
+    "raw-loader": "^0.5.1",
     "webpack": "^4.7.0",
     "webpack-cli": "^2.1.2",
     "webpack-dev-server": "^3.1.4"
   },
   "scripts": {
     "build": "webpack",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-path .gitignore",
     "precommit": "lint-staged",
     "preversion": "yarn build",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "test": "yarn lint && yarn build"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"]
+    "*.js": [
+      "eslint --fix --ignore-path .gitignore",
+      "git add"
+    ]
   },
   "files": [
-    "demo"
+    "src",
+    "dist"
   ],
   "keywords": [
     "glsl",
