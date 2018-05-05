@@ -1,5 +1,5 @@
 {
-  "name": "glsl-fast-gaussian-blur",
+  "name": "@amilajack/glsl-fast-gaussian-blur",
   "version": "2.0.0",
   "description": "optimized 9-tap gaussian blur for GLSL",
   "main": "./src/index.js",
@@ -22,6 +22,7 @@
     "gl-shader": "^4.0.1",
     "gl-texture2d": "^2.0.8",
     "glslify-loader": "^1.0.2",
+    "lint-staged": "^7.0.5",
     "load-img": "^1.0.0",
     "raf-loop": "^1.1.0",
     "raw-loader": "^0.5.1",
@@ -31,9 +32,14 @@
     "webpack-dev-server": "^3.1.4"
   },
   "scripts": {
-    "start": "webpack-dev-server",
     "build": "webpack",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "precommit": "lint-staged",
+    "preversion": "yarn build",
+    "start": "webpack-dev-server"
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
   },
   "files": [
     "demo"

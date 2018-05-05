@@ -43,6 +43,14 @@ Use [npm](https://www.npmjs.com/) to install and [glslify](https://github.com/st
 npm install glsl-fast-gaussian-blur --save
 ```
 
+## Setup
+```bash
+git clone https://github.com/amilajack/glsl-fast-gaussian-blur
+cd glsl-fast-gaussian-blur
+yarn
+yarn start
+```
+
 ## Usage
 
 [![NPM](https://nodei.co/npm/glsl-fast-gaussian-blur.png)](https://www.npmjs.com/package/glsl-fast-gaussian-blur)
@@ -56,7 +64,3 @@ Returns the blurred pixel color.
 ## Further Optimizations
 
 This can be further optimized on some devices (notably PowerVR) by using non-dependent texture reads. This can be done by calculating the texture coordinates in the vertex shader, and passing them as varyings to the fragment shader. This is left as an exercise for the reader to keep this module simple. You can read more about it [here](http://xissburg.com/faster-gaussian-blur-in-glsl/).
-
-## License
-
-MIT, see [LICENSE.md](http://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/LICENSE.md) for details.
