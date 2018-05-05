@@ -1,7 +1,11 @@
 glsl-fast-gaussian-blur
 =======================
 
-Oiptimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
+[![Build Status](https://travis-ci.org/amilajack/glsl-fast-gaussian-blur.svg?branch=master)](https://travis-ci.org/amilajack/glsl-fast-gaussian-blur)
+[![Dependency Status](https://img.shields.io/david/dev/amilajack/glsl-fast-gaussian-blur.svg)](https://david-dm.org/amilajack/glsl-fast-gaussian-blur)
+[![npm](https://img.shields.io/npm/dm/@amilajack/glsl-fast-gaussian-blur.svg)](https://npm-stat.com/charts.html?package=@amilajack/glsl-fast-gaussian-blur)
+
+Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
 
 ![demo](./img/demo.gif)
 
