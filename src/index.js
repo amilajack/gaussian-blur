@@ -1,42 +1,22 @@
-import triangle from "a-big-triangle";
-import createShader from "gl-shader";
-import createFBO from "gl-fbo";
-import loop from "raf-loop";
-import loadImage from "load-img";
-import glTexture2d from "gl-texture2d";
-import webglContext from "webgl-context";
-import vertexShader from "./vert.glsl";
-import fragmentShader from "./frag.glsl";
+import triangle from 'a-big-triangle';
+import createShader from 'gl-shader';
+import createFbo from 'gl-fbo';
+import loop from 'raf-loop';
+import loadImage from 'load-img';
+import glTexture2d from 'gl-texture2d';
+import webglContext from 'webgl-context';
+import vertexShader from './vert.glsl';
+import fragmentShader from './frag.glsl';
 
 let gl;
 
-function getBase64FromImageUrl(url) {
-  const img = new Image();
-
-  img.setAttribute("crossOrigin", "anonymous");
-
-  img.onload = function() {
-    const canvas = document.createElement("canvas");
-    canvas.width = this.width;
-    canvas.height = this.height;
-
-    gl = webglContext({
-      width: this.width,
-      height: this.height
-    });
-    document.body.appendChild(gl.canvas);
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(this, 0, 0);
-
-    const uri = canvas.toDataURL("image/png");
-
-    loadImage(uri, start);
-  };
-
-  img.src = url;
+function setParameters(texture) {
+  // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
+  //        different images sizes that are not powers of 2
+  // texture.wrapS = texture.wrapT = gl.REPEAT
+  texture.minFilter = gl.LINEAR;
+  texture.magFilter = gl.LINEAR;
 }
-
-getBase64FromImageUrl("./demo.jpg");
 
 function start(err, image) {
   if (err) throw err;
@@ -51,16 +31,10 @@ function start(err, image) {
   shader.uniforms.iResolution = [width, height, 0];
   shader.uniforms.iChannel0 = 0;
 
-  const fboA = createFBO(gl, [width, height]);
-  const fboB = createFBO(gl, [width, height]);
-
-  // apply linear filtering to get a smooth interpolation
-  const textures = [texture, fboA.color[0], fboB.color[0]];
-  textures.forEach(setParameters);
+  const fboA = createFbo(gl, [width, height]);
+  const fboB = createFbo(gl, [width, height]);
 
   let time = 0;
-
-  loop(render).start();
 
   function render(dt) {
     time += dt / 1000;
@@ -105,11 +79,37 @@ function start(err, image) {
     triangle(gl);
   }
 
-  function setParameters(texture) {
-    // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
-    //        different images sizes that are not powers of 2
-    // texture.wrapS = texture.wrapT = gl.REPEAT
-    texture.minFilter = gl.LINEAR;
-    texture.magFilter = gl.LINEAR;
-  }
+  loop(render).start();
+
+  // apply linear filtering to get a smooth interpolation
+  const textures = [texture, fboA.color[0], fboB.color[0]];
+  textures.forEach(setParameters);
 }
+
+function getBase64FromImageUrl(url) {
+  const img = new Image();
+
+  img.setAttribute('crossOrigin', 'anonymous');
+
+  img.onload = function onload() {
+    const canvas = document.createElement('canvas');
+    canvas.width = this.width;
+    canvas.height = this.height;
+
+    gl = webglContext({
+      width: this.width,
+      height: this.height
+    });
+    document.body.appendChild(gl.canvas);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(this, 0, 0);
+
+    const uri = canvas.toDataURL('image/png');
+
+    loadImage(uri, start);
+  };
+
+  img.src = url;
+}
+
+getBase64FromImageUrl('./demo.jpg');

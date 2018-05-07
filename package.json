@@ -40,7 +40,7 @@
     "lint": "eslint . --ignore-path .gitignore",
     "lint-fix": "yarn lint --fix; exit 0",
     "preversion": "yarn build",
-    "postlint-fix": "prettier --single-quote --ignore-path .gitignore --single-quote --write '**/*.js'",
+    "postlint-fix": "prettier --single-quote --ignore-path .gitignore --write '**/*.js'",
     "start": "webpack-dev-server",
     "test": "yarn build"
   },
@@ -52,7 +52,7 @@
   "lint-staged": {
     "*.js": [
       "yarn lint-fix",
-      "prettier --single-quote --ignore-path .gitignore --single-quote --write",
+      "prettier --single-quote --ignore-path .gitignore --write",
       "git add"
     ]
   },
