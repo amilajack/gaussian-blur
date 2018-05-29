@@ -37,8 +37,8 @@
   },
   "scripts": {
     "build": "webpack",
-    "lint": "eslint . --ignore-path .gitignore",
-    "lint-fix": "yarn lint --fix; exit 0",
+    "lint": "eslint . --ignore-path .eslintignore",
+    "lint-fix": "yarn lint --fix",
     "preversion": "yarn build",
     "postlint-fix": "prettier --single-quote --ignore-path .gitignore --write '**/*.js'",
     "start": "webpack-dev-server",

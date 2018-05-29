@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: 0 */
 import range from 'array-range';
 
 // a row of a pascal table with ends chopped off

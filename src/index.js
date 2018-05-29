@@ -11,11 +11,13 @@ import fragmentShader from './frag.glsl';
 let gl;
 
 function setParameters(texture) {
+  const newTexture = { ...texture };
   // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
   //        different images sizes that are not powers of 2
   // texture.wrapS = texture.wrapT = gl.REPEAT
-  texture.minFilter = gl.LINEAR;
-  texture.magFilter = gl.LINEAR;
+  newTexture.minFilter = gl.LINEAR;
+  newTexture.magFilter = gl.LINEAR;
+  return newTexture;
 }
 
 function start(err, image) {
@@ -112,4 +114,4 @@ function getBase64FromImageUrl(url) {
   img.src = url;
 }
 
-getBase64FromImageUrl('./demo.jpg');
+window.getBase64FromImageUrl = getBase64FromImageUrl;
