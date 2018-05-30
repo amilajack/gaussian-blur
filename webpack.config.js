@@ -10,6 +10,16 @@ const developmentConfig = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['flow']
+          }
+        }
+      },
+      {
         test: /\.(glsl|frag|vert)$/,
         loader: 'raw-loader',
         exclude: /node_modules/
@@ -37,6 +47,16 @@ const productionConfig = {
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['flow']
+          }
+        }
+      },
       {
         test: /\.(glsl|frag|vert)$/,
         loader: 'raw-loader',

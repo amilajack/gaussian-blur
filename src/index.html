@@ -9,7 +9,11 @@
 <body>
   <script src="http://localhost:8080/index.js"></script>
   <script>
-    getBase64FromImageUrl('./demo.jpg');
+    (async () => {
+      const blur = new GaussianBlur();
+      await blur.setImage('./demo.jpg');
+      blur.changeBlurRadius(100);
+    })();
   </script>
 </body>
 </html>
