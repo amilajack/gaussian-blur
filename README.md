@@ -1,8 +1,8 @@
-glsl-fast-gaussian-blur
+gaussian-blur
 =======================
 
-[![Build Status](https://travis-ci.org/amilajack/glsl-fast-gaussian-blur.svg?branch=master)](https://travis-ci.org/amilajack/glsl-fast-gaussian-blur)
-[![Dependency Status](https://img.shields.io/david/dev/amilajack/glsl-fast-gaussian-blur.svg)](https://david-dm.org/amilajack/glsl-fast-gaussian-blur)
+[![Build Status](https://travis-ci.org/amilajack/gaussian-blur.svg?branch=master)](https://travis-ci.org/amilajack/gaussian-blur)
+[![Dependency Status](https://img.shields.io/david/dev/amilajack/gaussian-blur.svg)](https://david-dm.org/amilajack/gaussian-blur)
 
 Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
 
@@ -13,7 +13,7 @@ Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gau
 The function blurs in a single direction. For correct results, the texture should be using `gl.LINEAR` filtering.
 
 ```glsl
-#pragma glslify: blur = require('glsl-fast-gaussian-blur')
+#pragma glslify: blur = require('gaussian-blur')
 
 uniform vec2 iResolution;
 uniform sampler2D iChannel0;
@@ -28,9 +28,9 @@ void main() {
 The module provides three levels of "taps" (the number of pixels averaged for the blur) that can be required individually. The default is 9.
 
 ```glsl
-#pragma glslify: blur1 = require('glsl-fast-gaussian-blur/13')
-#pragma glslify: blur2 = require('glsl-fast-gaussian-blur/9')
-#pragma glslify: blur3 = require('glsl-fast-gaussian-blur/5')
+#pragma glslify: blur1 = require('gaussian-blur/13')
+#pragma glslify: blur2 = require('gaussian-blur/9')
+#pragma glslify: blur3 = require('gaussian-blur/5')
 ```
 
 Since this is separable, you will need multiple passes to blur an image in both directions. See [here](https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson5) for details or [the demo](./demo/index.js) for an implementation.
@@ -41,15 +41,15 @@ Use [npm](https://www.npmjs.com/) to install and [glslify](https://github.com/st
 
 ```bash
 # npm
-npm install @amilajack/glsl-fast-gaussian-blur
+npm install @amilajack/gaussian-blur
 # yarn
-yarn add @amilajack/glsl-fast-gaussian-blur
+yarn add @amilajack/gaussian-blur
 ```
 
 ## Setup
 ```bash
-git clone https://github.com/amilajack/glsl-fast-gaussian-blur
-cd glsl-fast-gaussian-blur
+git clone https://github.com/amilajack/gaussian-blur
+cd gaussian-blur
 yarn
 yarn start
 ```

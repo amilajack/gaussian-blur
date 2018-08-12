@@ -1,4 +1,4 @@
 node_modules
 *.log
 .DS_Store
-# 'dist' isn't ignored because it is used to show the github pages site 
+# 'dist' isn't ignored because it is used to show the github pages site
