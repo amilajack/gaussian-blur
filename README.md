@@ -17,17 +17,9 @@ npm install gaussian-blur
 ```js
 import GaussianBlur from 'gaussian-blur';
 
-const blur = new GaussianBlur({
-  blurRadius: 50,
-  targetElement: 'body'
-});
-
+const blur = new GaussianBlur();
 await blur.setImage('./foo.jpg');
-
-// Update the blur radius
-blur.changeBlurRadius(100, {
-  animate: true // optional
-});
+blur.changeBlurRadius(5);
 ```
 
 ## Running examples

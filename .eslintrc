@@ -1,12 +1,17 @@
 {
   "extends": [
     "bliss",
-    "prettier"
+    "prettier",
+    "plugin:testcafe/recommended"
   ],
   "env": {
     "browser": true
   },
   "rules": {
-    "no-plusplus": "off"
-  }
+    "no-plusplus": "off",
+    "flowtype-errors/show-errors": "off"
+  },
+  "plugins": [
+    "testcafe"
+  ]
 }

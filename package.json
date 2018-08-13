@@ -1,8 +1,8 @@
 {
   "name": "@amilajack/gaussian-blur",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "description": "optimized 9-tap gaussian blur for GLSL",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "license": "MIT",
   "author": {
     "name": "Amila Welihinda",
@@ -27,6 +27,7 @@
     "eslint": "^5.3.0",
     "eslint-config-bliss": "^2.2.0",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-testcafe": "^0.2.1",
     "flow-bin": "^0.78.0",
     "glslify-loader": "^1.0.2",
     "husky": "^1.0.0-rc.2",
@@ -45,7 +46,8 @@
     "preversion": "yarn build",
     "postlint-fix": "prettier --single-quote --ignore-path .gitignore --write '**/*.js'",
     "start": "webpack-dev-server",
-    "test": "yarn build"
+    "test": "yarn build && yarn test-e2e",
+    "test-e2e": "testcafe chrome:headless ./test/e2e/*.e2e.js"
   },
   "husky": {
     "hooks": {
