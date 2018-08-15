@@ -42,13 +42,13 @@
     "webpack-dev-server": "^3.1.5"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
     "lint": "eslint . --ignore-path .eslintignore",
     "lint-fix": "yarn lint --fix",
     "preversion": "yarn build",
     "postlint-fix": "prettier --single-quote --ignore-path .gitignore --write '**/*.js'",
     "start": "webpack-dev-server",
-    "test": "yarn build && yarn test-e2e",
+    "test": "yarn build && yarn test-e2e-local",
     "test-e2e-local": "testcafe chrome:headless ./test/e2e/*.e2e.js",
     "test-e2e": "node test/setup.js"
   },

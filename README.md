@@ -29,4 +29,6 @@ cd gaussian-blur
 yarn
 # Run the example
 yarn start
+# Build the lib
+yarn build
 ```

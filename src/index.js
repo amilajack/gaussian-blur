@@ -96,7 +96,6 @@ export default class GaussianBlur {
 
   async setImage(url: string): Promise<void> {
     this.imageUri = await this.getBase64FromImageUrl(url);
-    console.log(this.gl);
     return new Promise((resolve, reject) => {
       loadImage(this.imageUri, (err, image) => {
         if (err) reject(err);
