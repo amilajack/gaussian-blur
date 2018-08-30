@@ -1,12 +1,22 @@
 sudo: required
 
+node_js:
+  - node
+
 addons:
   chrome: stable
   sauce_connect: true
 
 language: node_js
 
-node_js:
-  - node
-
 cache: yarn
+
+before_install: yarn global add greenkeeper-lockfile
+
+before_script: greenkeeper-lockfile-update
+
+after_script: greenkeeper-lockfile-upload
+
+env:
+  global:
+    secure: dIpM1tfhkXmR2IDa4t18tgjjLE4QpluCvLb5vnTdcdDgzxtvj2f+b605LTr2uRTYcYxOui0RwgyvnhhQuESm0dM3IAqlUCUUFXOppjvRa1y8I7clh05gq1ztTrzmWJcbHJkTioMTvyEJPO3eaGY/GKo447B9OJE3nUjcHNGrafpZBJ2U3g7n/f7JBv5TpKT2gG8dlzhfnR0/msLMBpWLvFvj49vCS4yi8mWQAOcw+Box3dOZd8NdcS3MePf1/No4cOQTp4t1Dsr7opYijAlZsMVCFnBXgCkvkDQx8zGZm23KnEbPQvTgtbe58rojXkJB0ML/V/j9wFaupKSvT/Syj78p0NF01nBLlIu1JkQHdMuV1AD2gLGrRfx4ALxXKGC8/dwNwDAI5WtTJy007ldZ9z7qkmoKdmnRjetT+Y7NvwGolpY49FiNmtlVRizo8mZ8Uxi4dUU8rIhAojsSqy+x1ke/Mz6gN6/L/j5LLaQmDsz17aygcLZFyFi9TOTJ+EEvzmZKfliRHN7VYX74gawXiWc+mSpx0vC2YPprjBC8KgMC9VxYNNLQtbT1ADJYTRDLhiGAWMQSivXr64WCN6si4WWTMu5K6gHTVbk+/qejuYYa5ZvyYFvt0vpEPJGPaBgdB7du32+t86U5J1pt92X3JsUSVTKFtT9IqjWMvb0LTjI=
