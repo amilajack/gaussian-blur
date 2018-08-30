@@ -15,7 +15,7 @@ const developmentConfig = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['flow']
+            presets: ['@babel/preset-flow']
           }
         }
       },
@@ -53,7 +53,8 @@ const productionConfig = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['flow']
+            presets: ['@babel/preset-flow'],
+            plugins: ['@babel/plugin-proposal-class-properties']
           }
         }
       },
