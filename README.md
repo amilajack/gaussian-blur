@@ -11,7 +11,7 @@ Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gau
 
 ## Installation
 ```bash
-npm install gaussian-blur
+yarn add gaussian-blur
 ```
 
 ## Usage
