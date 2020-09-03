@@ -3,3 +3,5 @@ node_modules
 .DS_Store
 # 'dist' isn't ignored because it is used to show the github pages site
 .env
+.cache
+
