@@ -4,4 +4,4 @@ node_modules
 # 'dist' isn't ignored because it is used to show the github pages site
 .env
 .cache
-
+dist
