@@ -52,6 +52,7 @@
     "build:demo": "parcel build src/index.html --out-dir demo --public-url /gaussian-blur",
     "deploy": "yarn build:demo && gh-pages -d demo && rm -rf demo",
     "lint": "eslint . --fix",
+    "test": "yarn lint && yarn build && yarn build:demo && rm -rf demo",
     "start": "parcel src/index.html"
   },
   "devDependencies": {
