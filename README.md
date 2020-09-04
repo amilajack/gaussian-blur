@@ -32,3 +32,9 @@ yarn start
 # Build the lib
 yarn build
 ```
+
+## Related
+
+* https://github.com/flozz/StackBlur
+* https://github.com/pcwalton/fast-gaussian
+* https://github.com/Jam3/glsl-fast-gaussian-blur
