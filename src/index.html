@@ -9,24 +9,6 @@
 <body>
   <input type="range" min="1" max="100" value="0" />
   <div id="output"></div>
-  <script src="http://localhost:8080/index.js"></script>
-  <script>
-    (async () => {
-      const blur = new GaussianBlur();
-      await blur.setImage('./demo.jpg');
-      let blurRadius = 0;
-      blur.changeBlurRadius(blurRadius);
-
-      const slider = document.querySelector('input');
-      const output = document.getElementById('output');
-      output.innerHTML = `Blur radius: ${blurRadius}`;
-
-      slider.oninput = function() {
-        blurRadius = this.value * 0.1
-        output.innerHTML = `Blur radius: ${Math.round(blurRadius * 10) * 0.1}`;
-        blur.changeBlurRadius(blurRadius);
-      };
-    })();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

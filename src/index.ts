@@ -1,7 +1,6 @@
 import triangle from 'a-big-triangle';
 import createShader from 'gl-shader';
 import createFbo from 'gl-fbo';
-// import loop from 'raf-loop';
 import loadImage from 'load-img';
 import glTexture2d from 'gl-texture2d';
 import webglContext from 'webgl-context';
@@ -9,31 +8,19 @@ import vertexShader from './vert.glsl';
 import fragmentShader from './frag.glsl';
 
 export default class GaussianBlur {
-  /**
-   * @private
-   */
-  imageSrc: string;
+  private imageSrc: string;
 
-  /**
-   * @private
-   */
-  blurRadius: number;
+  private blurRadius: number;
 
-  /**
-   * @private
-   */
-  targetElement: Element;
+  private targetElement: Element;
 
-  /**
-   * @private
-   */
-  glContext;
+  private glContext;
 
-  imageUri: ?string;
+  private imageUri: ?string;
 
-  image: string;
+  private image: string;
 
-  gl: {
+  private gl: {
     LINEAR: number,
     drawingBufferWidth: number,
     drawingBufferHeight: number,
@@ -52,10 +39,7 @@ export default class GaussianBlur {
     this.targetElement = document.querySelector(opts.targetElement) || 'body';
   }
 
-  /**
-   * @private
-   */
-  setParameters(texture: Object) {
+  private setParameters(texture: Object) {
     const newTexture = Object.assign({}, texture);
     // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
     //        different images sizes that are not powers of 2
@@ -65,10 +49,7 @@ export default class GaussianBlur {
     return newTexture;
   }
 
-  /**
-   * @private
-   */
-  getBase64FromImageUrl(url: string): Promise<string> {
+  private getBase64FromImageUrl(url: string): Promise<string> {
     const img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');
     img.src = url;
@@ -168,11 +149,7 @@ export default class GaussianBlur {
     textures.forEach(e => this.setParameters(e));
   }
 
-  /**
-   * @private
-   * @TODO
-   */
-  // animateBlur(image: Image) {}
+  // private animateBlur(image: Image) {}
 
   // @TODO
   // getHtml() {}
