@@ -49,7 +49,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:demo": "parcel build src/index.html --out-dir demo",
+    "build:demo": "parcel build src/index.html --out-dir demo --public-url /gaussian-blur",
     "deploy": "yarn build:demo && gh-pages -d demo && rm -rf demo",
     "lint": "eslint . --fix",
     "start": "parcel src/index.html"
