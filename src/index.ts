@@ -1,75 +1,61 @@
-import triangle from 'a-big-triangle';
-import createShader from 'gl-shader';
-import createFbo from 'gl-fbo';
-import loadImage from 'load-img';
-import glTexture2d from 'gl-texture2d';
-import webglContext from 'webgl-context';
-import vertexShader from './vert.glsl';
-import fragmentShader from './frag.glsl';
+import triangle from "a-big-triangle";
+import createShader from "gl-shader";
+import createFbo from "gl-fbo";
+import loadImage from "load-img";
+import glTexture2d from "gl-texture2d";
+import webglContext from "webgl-context";
+import vertexShader from "./vert.glsl";
+import fragmentShader from "./frag.glsl";
+
+interface Texture {
+  readonly minFilter: number,
+  readonly magFilter: number,
+}
 
 export default class GaussianBlur {
-  private imageSrc: string;
-
   private blurRadius: number;
 
-  private targetElement: Element;
+  private imageUri?: string;
 
-  private glContext;
+  private image?: HTMLImageElement;
 
-  private imageUri: ?string;
-
-  private image: string;
-
-  private gl: {
-    LINEAR: number,
-    drawingBufferWidth: number,
-    drawingBufferHeight: number,
-    FRAMEBUFFER: Array<number>,
-    clearColor: (a: number, b: number, c: number, d: number) => void,
-    viewport: (a: number, b: number, c: number, d: number) => void,
-    clear: (a: number) => void,
-    COLOR_BUFFER_BIT: number,
-    bindFramebuffer: (a: Array<number>, b: any) => void
-  };
+  private gl: WebGLRenderingContext;
 
   constructor(
-    opts: { blurRadius?: number, targetElement?: 'string' | Element } = {}
+    opts: { blurRadius?: number } = {}
   ) {
     this.blurRadius = opts.blurRadius || 50;
-    this.targetElement = document.querySelector(opts.targetElement) || 'body';
   }
 
-  private setParameters(texture: Object) {
-    const newTexture = Object.assign({}, texture);
-    // @TODO: I'm not sure what this line does. Disabling it makes the shader work for
-    //        different images sizes that are not powers of 2
-    // texture.wrapS = texture.wrapT = gl.REPEAT
-    newTexture.minFilter = this.gl.LINEAR;
-    newTexture.magFilter = this.gl.LINEAR;
-    return newTexture;
+  private setParameters(texture: Texture): void {
+    texture.wrapS = texture.wrapT = this.gl.REPEAT
+    texture.minFilter = this.gl.LINEAR
+    texture.magFilter = this.gl.LINEAR
   }
 
   private getBase64FromImageUrl(url: string): Promise<string> {
     const img = new Image();
-    img.setAttribute('crossOrigin', 'anonymous');
+    img.setAttribute("crossOrigin", "anonymous");
     img.src = url;
-    const self = this;
 
-    return new Promise(resolve => {
-      img.onload = function onload() {
-        const canvas = document.createElement('canvas');
-        canvas.width = this.width;
-        canvas.height = this.height;
+    return new Promise((resolve) => {
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const {width, height} = img;
+        canvas.width = width;
+        canvas.height = height;
 
-        self.gl = webglContext({
-          width: this.width,
-          height: this.height
+        this.gl = webglContext({
+          width: width,
+          height: height,
         });
-        document.body.appendChild(self.gl.canvas);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(this, 0, 0);
+        console.log(this.gl)
+        document.body.appendChild(this.gl.canvas);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error('canvas context could not be initialized')
+        ctx.drawImage(img, 0, 0);
 
-        return resolve(canvas.toDataURL('image/png'));
+        return resolve(canvas.toDataURL("image/png"));
       };
     });
   }
@@ -77,7 +63,7 @@ export default class GaussianBlur {
   async setImage(url: string): Promise<void> {
     this.imageUri = await this.getBase64FromImageUrl(url);
     return new Promise((resolve, reject) => {
-      loadImage(this.imageUri, (err, image) => {
+      loadImage(this.imageUri, (err: Error, image: HTMLImageElement) => {
         if (err) reject(err);
         this.image = image;
         this.changeBlurRadius(this.blurRadius);
@@ -113,7 +99,6 @@ export default class GaussianBlur {
     const iterations = 8;
     let writeBuffer = fboA;
     let readBuffer = fboB;
-    const self = this;
 
     for (let i = 0; i < iterations; i++) {
       // draw blurred in one direction
@@ -127,9 +112,9 @@ export default class GaussianBlur {
       shader.uniforms.flip = true;
       shader.uniforms.direction =
         i % 2 === 0 ? [blurRadius, 0] : [0, blurRadius];
-      self.gl.clearColor(0, 0, 0, 0);
-      self.gl.clear(self.gl.COLOR_BUFFER_BIT);
-      triangle(self.gl);
+      this.gl.clearColor(0, 0, 0, 0);
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+      triangle(this.gl);
 
       // swap buffers
       const t = writeBuffer;
@@ -138,15 +123,15 @@ export default class GaussianBlur {
     }
 
     // draw last FBO to screen
-    self.gl.bindFramebuffer(self.gl.FRAMEBUFFER, null);
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
     writeBuffer.color[0].bind();
     shader.uniforms.direction = [0, 0]; // no blur
     shader.uniforms.flip = iterations % 2 !== 0;
-    triangle(self.gl);
+    triangle(this.gl);
 
     // apply linear filtering to get a smooth interpolation
     const textures = [texture, fboA.color[0], fboB.color[0]];
-    textures.forEach(e => this.setParameters(e));
+    textures.forEach((e) => this.setParameters(e));
   }
 
   // private animateBlur(image: Image) {}

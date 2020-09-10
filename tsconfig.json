@@ -7,6 +7,5 @@
     "declaration": true,
     "outDir": "dist",
     "strict": true
-  },
-  "include": ["src/index.ts"]
+  }
 }
