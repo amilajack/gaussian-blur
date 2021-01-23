@@ -35,7 +35,6 @@ const getBase64FromImageUrl = (url: string): Promise<string> => {
 };
 
 getBase64FromImageUrl(demoImg).then((uri) => {
-  // console.log(uri, gl);
   loadImage(uri, start);
 });
 
@@ -44,8 +43,6 @@ function start(err, image) {
 
   const width = gl.drawingBufferWidth;
   const height = gl.drawingBufferHeight;
-  console.log(width, height);
-
   const texture = require("gl-texture2d")(gl, image);
 
   const shader = createShader(gl, vert, frag);
