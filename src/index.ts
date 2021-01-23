@@ -1,106 +1,83 @@
 import triangle from "a-big-triangle";
 import createShader from "gl-shader";
-import createFbo from "gl-fbo";
+import createFBO from "gl-fbo";
+import loop from "raf-loop";
 import loadImage from "load-img";
-import glTexture2d from "gl-texture2d";
-import webglContext from "webgl-context";
-import vertexShader from "./vert.glsl";
-import fragmentShader from "./frag.glsl";
+import demoImg from "../img/demo.jpg";
+import vert from "./vert.glsl";
+import frag from "./frag.glsl";
 
-interface Texture {
-  readonly minFilter: number,
-  readonly magFilter: number,
-}
+let gl: WebGL2RenderingContext;
 
-export default class GaussianBlur {
-  private blurRadius: number;
+const getBase64FromImageUrl = (url: string): Promise<string> => {
+  const img = new Image();
+  img.setAttribute("crossOrigin", "anonymous");
+  img.src = url;
 
-  private imageUri?: string;
+  return new Promise((resolve) => {
+    img.onload = function onload() {
+      const { height, width } = img;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
 
-  private image?: HTMLImageElement;
+      const offscreenCanvas = document.createElement("canvas");
+      gl = offscreenCanvas.getContext("webgl2")!;
+      offscreenCanvas.width = width;
+      offscreenCanvas.height = height;
+      canvas.getContext("2d")!.drawImage(img, 0, 0);
 
-  private gl: WebGLRenderingContext;
+      document.body.appendChild(canvas);
+      document.body.appendChild(offscreenCanvas);
+      return resolve(canvas.toDataURL("image/png"));
+    };
+  });
+};
 
-  constructor(
-    opts: { blurRadius?: number } = {}
-  ) {
-    this.blurRadius = opts.blurRadius || 50;
-  }
+getBase64FromImageUrl(demoImg).then((uri) => {
+  // console.log(uri, gl);
+  loadImage(uri, start);
+});
 
-  private setParameters(texture: Texture): void {
-    texture.wrapS = texture.wrapT = this.gl.REPEAT
-    texture.minFilter = this.gl.LINEAR
-    texture.magFilter = this.gl.LINEAR
-  }
+function start(err, image) {
+  if (err) throw err;
 
-  private getBase64FromImageUrl(url: string): Promise<string> {
-    const img = new Image();
-    img.setAttribute("crossOrigin", "anonymous");
-    img.src = url;
+  const width = gl.drawingBufferWidth;
+  const height = gl.drawingBufferHeight;
+  console.log(width, height);
 
-    return new Promise((resolve) => {
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const {width, height} = img;
-        canvas.width = width;
-        canvas.height = height;
+  const texture = require("gl-texture2d")(gl, image);
 
-        this.gl = webglContext({
-          width: width,
-          height: height,
-        });
-        console.log(this.gl)
-        document.body.appendChild(this.gl.canvas);
-        const ctx = canvas.getContext("2d");
-        if (!ctx) throw new Error('canvas context could not be initialized')
-        ctx.drawImage(img, 0, 0);
+  const shader = createShader(gl, vert, frag);
+  shader.bind();
+  shader.uniforms.iResolution = [width, height, 0];
+  shader.uniforms.iChannel0 = 0;
 
-        return resolve(canvas.toDataURL("image/png"));
-      };
-    });
-  }
+  const fboA = createFBO(gl, [width, height]);
+  const fboB = createFBO(gl, [width, height]);
 
-  async setImage(url: string): Promise<void> {
-    this.imageUri = await this.getBase64FromImageUrl(url);
-    return new Promise((resolve, reject) => {
-      loadImage(this.imageUri, (err: Error, image: HTMLImageElement) => {
-        if (err) reject(err);
-        this.image = image;
-        this.changeBlurRadius(this.blurRadius);
-        resolve();
-      });
-    });
-  }
+  // apply linear filtering to get a smooth interpolation
+  const textures = [texture, fboA.color[0], fboB.color[0]];
+  textures.forEach(setParameters);
 
-  /**
-   * Animate the blur from one radius to another. Resolve the promise when animation is done
-   * @TODO: Add the args `opts?: { animate: bool } = { animate: true }`
-   */
-  changeBlurRadius(blurRadius: number) {
-    this.blurRadius = blurRadius;
+  let time = 0;
 
-    const width = this.gl.drawingBufferWidth;
-    const height = this.gl.drawingBufferHeight;
+  loop(render).start();
 
-    // Create texture
-    const texture = glTexture2d(this.gl, this.image);
+  function render(dt: number) {
+    time += dt / 1000;
+    gl.viewport(0, 0, width, height);
 
-    // Create shader
-    const shader = createShader(this.gl, vertexShader, fragmentShader);
-    shader.bind();
-    shader.uniforms.iResolution = [width, height, 0];
-    shader.uniforms.iChannel0 = 0;
-
-    const fboA = createFbo(this.gl, [width, height]);
-    const fboB = createFbo(this.gl, [width, height]);
-
-    this.gl.viewport(0, 0, width, height);
-
+    const anim = Math.sin(time) * 0.5 + 0.5;
     const iterations = 8;
     let writeBuffer = fboA;
     let readBuffer = fboB;
 
-    for (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i += 1) {
+      // we will approximate a larger blur by using
+      // multiple iterations starting with a very wide radius
+      const radius = (iterations - i - 1) * anim;
+
       // draw blurred in one direction
       writeBuffer.bind();
       if (i === 0) {
@@ -110,11 +87,10 @@ export default class GaussianBlur {
       }
       shader.bind();
       shader.uniforms.flip = true;
-      shader.uniforms.direction =
-        i % 2 === 0 ? [blurRadius, 0] : [0, blurRadius];
-      this.gl.clearColor(0, 0, 0, 0);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      triangle(this.gl);
+      shader.uniforms.direction = i % 2 === 0 ? [radius, 0] : [0, radius];
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      triangle(gl);
 
       // swap buffers
       const t = writeBuffer;
@@ -123,22 +99,16 @@ export default class GaussianBlur {
     }
 
     // draw last FBO to screen
-    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     writeBuffer.color[0].bind();
     shader.uniforms.direction = [0, 0]; // no blur
     shader.uniforms.flip = iterations % 2 !== 0;
-    triangle(this.gl);
-
-    // apply linear filtering to get a smooth interpolation
-    const textures = [texture, fboA.color[0], fboB.color[0]];
-    textures.forEach((e) => this.setParameters(e));
+    triangle(gl);
   }
 
-  // private animateBlur(image: Image) {}
-
-  // @TODO
-  // getHtml() {}
-
-  // @TODO
-  // appendTo() {}
+  function setParameters(texture) {
+    texture.wrapS = texture.wrapT = gl.REPEAT;
+    texture.minFilter = gl.LINEAR;
+    texture.magFilter = gl.LINEAR;
+  }
 }
