@@ -27,7 +27,6 @@ const getBase64FromImageUrl = (url: string): Promise<string> => {
       offscreenCanvas.height = height;
       canvas.getContext("2d")!.drawImage(img, 0, 0);
 
-      document.body.appendChild(canvas);
       document.body.appendChild(offscreenCanvas);
       return resolve(canvas.toDataURL("image/png"));
     };
