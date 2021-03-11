@@ -5,10 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>GLSL Fast Gaussian Blur</title>
+  <style>
+    input {
+      position: absolute;
+    }
+    body, html {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
   <input type="range" min="1" max="100" value="0" />
+  <canvas></canvas>
   <div id="output"></div>
-  <script src="../src/index.ts"></script>
+  <script src="./app.ts"></script>
 </body>
 </html>
