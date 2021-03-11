@@ -7,7 +7,7 @@ import vert from "./vert.glsl";
 import frag from "./frag.glsl";
 
 export default class Gaussian {
-  private gl: WebGL2RenderingContext;
+  gl: WebGL2RenderingContext;
 
   private shader: typeof createShader;
 
@@ -40,12 +40,12 @@ export default class Gaussian {
     this.shader = shader;
   }
 
-  draw(iterations: number, anim: number) {
+  draw(iterations: number, radiusDelta: number = 1) {
     let { fboA: writeBuffer, fboB: readBuffer, texture, shader, gl } = this;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     for (let i = 0; i < iterations; i += 1) {
-      const radius = (iterations - i - 1) * anim;
+      const radius = (iterations - i - 1) * radiusDelta;
       // draw blurred in one direction
       writeBuffer.bind();
       if (i === 0) {

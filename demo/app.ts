@@ -1,6 +1,6 @@
-import Gaussian, { getBase64FromImageUrl } from "../src";
-import imgSrc from "../img/demo.jpg";
 import loop from 'raf-loop';
+import Gaussian from "../src";
+import imgSrc from "../img/demo.jpg";
 
 (async () => {
   const canvas = document.querySelector("canvas")!;
@@ -22,8 +22,9 @@ import loop from 'raf-loop';
   output.innerHTML = `Blur radius: ${blurRadius}`;
 
   let speed = 1;
+
   slider.oninput = () => {
-    speed = slider.value
+    speed = parseInt(slider.value)
   };
 
   window.onresize = () => {
