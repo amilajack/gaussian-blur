@@ -7,9 +7,10 @@ import vert from "./vert.glsl";
 import frag from "./frag.glsl";
 
 export default class Gaussian {
-  private blurRadius = 1;
   private gl: WebGL2RenderingContext;
+
   private shader: typeof createShader;
+
   private texture: typeof texture2D;
 
   constructor(canvas: HTMLCanvasElement, img: HTMLImageElement) {
@@ -39,22 +40,12 @@ export default class Gaussian {
     this.shader = shader;
   }
 
-  setBlur(radius: number) {
-    this.blurRadius = radius;
-  }
-
-  draw(iterations: number) {
-    let {
-      fboA: writeBuffer,
-      fboB: readBuffer,
-      blurRadius: radius,
-      texture,
-      shader,
-      gl,
-    } = this;
+  draw(iterations: number, anim: number) {
+    let { fboA: writeBuffer, fboB: readBuffer, texture, shader, gl } = this;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     for (let i = 0; i < iterations; i += 1) {
+      const radius = (iterations - i - 1) * anim;
       // draw blurred in one direction
       writeBuffer.bind();
       if (i === 0) {
