@@ -2,7 +2,7 @@
 import range from "array-range";
 
 // a row of a pascal table with ends chopped off
-export default function coefficients(weights) {
+export default function coefficients(weights: number[]) {
   if (weights.length % 2 === 0) {
     throw new Error("only supports odd table");
   }
