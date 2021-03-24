@@ -38,9 +38,21 @@ export default class Gaussian {
     textures.forEach(setParameters);
     this.texture = texture;
     this.shader = shader;
+
+    window.onresize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const { width } = this.gl.canvas;
+      const { height } = this.gl.canvas;
+      this.gl.viewport(0, 0, width, height);
+      this.fboA = createFBO(this.gl, [width, height]);
+      this.fboB = createFBO(this.gl, [width, height]);
+      shader.uniforms.iResolution = [width, height, 0];
+      this.gl.viewport(0, 0, canvas.width, canvas.height);
+    };
   }
 
-  draw(iterations: number, radiusDelta: number = 1) {
+  draw(iterations: number, radiusDelta = 1) {
     let { fboA: writeBuffer, fboB: readBuffer, texture, shader, gl } = this;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
