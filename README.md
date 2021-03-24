@@ -1,7 +1,7 @@
 gaussian-blur
 =======================
 
-[![Build Status](https://travis-ci.org/amilajack/gaussian-blur.svg?branch=master)](https://travis-ci.org/amilajack/gaussian-blur)
+[![Test](https://github.com/amilajack/gaussian-blur/actions/workflows/test.yml/badge.svg)](https://github.com/amilajack/gaussian-blur/actions/workflows/test.yml)
 [![Dependency Status](https://img.shields.io/david/amilajack/gaussian-blur.svg)](https://david-dm.org/amilajack/gaussian-blur)
 
 Optimized separable gaussian blurs for GLSL. This is adapted from [Efficient Gaussian Blur with Linear Sampling](http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/).
