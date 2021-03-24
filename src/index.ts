@@ -16,8 +16,8 @@ export default class Gaussian {
   constructor(canvas: HTMLCanvasElement, img: HTMLImageElement) {
     this.gl = canvas.getContext("webgl2")!;
 
-    const width = this.gl.drawingBufferWidth;
-    const height = this.gl.drawingBufferHeight;
+    let width = this.gl.drawingBufferWidth;
+    let height = this.gl.drawingBufferHeight;
     const texture = texture2D(this.gl, img);
 
     const shader = createShader(this.gl, vert, frag);
@@ -30,10 +30,11 @@ export default class Gaussian {
 
     // apply linear filtering to get a smooth interpolation
     const textures = [texture, this.fboA.color[0], this.fboB.color[0]];
-    const setParameters = (texture: typeof texture2D) => {
-      texture.wrapS = texture.wrapT = this.gl.REPEAT;
-      texture.minFilter = this.gl.LINEAR;
-      texture.magFilter = this.gl.LINEAR;
+    const setParameters = (tex: typeof texture2D) => {
+      tex.wrapS = this.gl.REPEAT;
+      tex.wrapT = this.gl.REPEAT;
+      tex.minFilter = this.gl.LINEAR;
+      tex.magFilter = this.gl.LINEAR;
     };
     textures.forEach(setParameters);
     this.texture = texture;
@@ -42,8 +43,7 @@ export default class Gaussian {
     window.onresize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      const { width } = this.gl.canvas;
-      const { height } = this.gl.canvas;
+      ({ width, height } = this.gl.canvas);
       this.gl.viewport(0, 0, width, height);
       this.fboA = createFBO(this.gl, [width, height]);
       this.fboB = createFBO(this.gl, [width, height]);
@@ -53,7 +53,8 @@ export default class Gaussian {
   }
 
   draw(iterations: number, radiusDelta = 1) {
-    let { fboA: writeBuffer, fboB: readBuffer, texture, shader, gl } = this;
+    let { fboA: writeBuffer, fboB: readBuffer } = this;
+    const { texture, shader, gl } = this;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     for (let i = 0; i < iterations; i += 1) {

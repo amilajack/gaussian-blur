@@ -1,6 +1,6 @@
 import loop from "raf-loop";
+import imgSrc from "url:../img/demo.jpg";
 import Gaussian from "../src";
-import imgSrc from "../img/demo.jpg";
 
 (async () => {
   const canvas = document.querySelector("canvas")!;
@@ -24,7 +24,7 @@ import imgSrc from "../img/demo.jpg";
   let speed = 1;
 
   slider.oninput = () => {
-    speed = parseInt(slider.value);
+    speed = parseInt(slider.value, 10);
   };
 
   let time = 0;
