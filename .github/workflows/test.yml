@@ -35,4 +35,4 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: yarn test
-        run: yarn test && yarn build:demo
+        run: yarn test

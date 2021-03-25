@@ -2,7 +2,7 @@
   "name": "gaussian-blur-demo",
   "version": "0.0.1",
   "description": "optimized 9-tap gaussian blur for GLSL",
-  "main": "index.html",
+  "main": "dist/index.html",
   "license": "MIT",
   "author": {
     "name": "Amila Welihinda",
@@ -47,7 +47,7 @@
     "url": "https://github.com/amilajack/gaussian-blur/issues"
   },
   "scripts": {
-    "build": "parcel build index.html --dist-dir demo/dist --public-url /gaussian-blur",
+    "build": "parcel build index.html --dist-dir dist --public-url /gaussian-blur",
     "deploy": "yarn build && gh-pages -d dist && rm -rf dist",
     "start": "parcel index.html"
   }

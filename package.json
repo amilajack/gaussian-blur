@@ -52,7 +52,7 @@
     "build": "tsc",
     "build:demo": "cd demo && yarn && yarn build",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "test": "yarn lint && yarn build",
+    "test": "yarn lint && yarn build && yarn build:demo",
     "start": "cd demo && yarn start"
   },
   "devDependencies": {
