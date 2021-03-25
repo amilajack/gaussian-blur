@@ -17,9 +17,6 @@ import Gaussian from "../src";
   blur.draw(2);
 
   const slider = document.querySelector("input") as HTMLInputElement;
-  const output = document.getElementById("output") as HTMLInputElement;
-  const blurRadius = 0;
-  output.innerHTML = `Blur radius: ${blurRadius}`;
 
   let speed = 1;
 

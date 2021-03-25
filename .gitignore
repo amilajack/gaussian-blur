@@ -5,6 +5,5 @@ node_modules
 .env
 .cache
 dist
-lib
 
 .parcel-cache
