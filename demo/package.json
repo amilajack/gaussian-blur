@@ -43,6 +43,8 @@
     "start": "parcel index.html"
   },
   "devDependencies": {
-    "parcel": "^2.0.0-beta.2"
+    "parcel": "^2.0.0-beta.2",
+    "@parcel/transformer-glsl": "2.0.0-beta.2",
+    "@parcel/transformer-image": "2.0.0-beta.2"
   }
 }
