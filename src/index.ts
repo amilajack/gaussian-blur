@@ -12,6 +12,8 @@ type Texture = ReturnType<typeof texture2D>;
 
 type FrameBuffer = ReturnType<typeof createFBO>;
 
+const DEFAULT_OPTS = { resize: true };
+
 export default class Gaussian {
   gl: WebGL2RenderingContext;
 
@@ -23,7 +25,14 @@ export default class Gaussian {
 
   private fboB: FrameBuffer;
 
-  constructor(canvas: HTMLCanvasElement, img: HTMLImageElement) {
+  private resizeEvent?: () => void;
+
+  constructor(
+    canvas: HTMLCanvasElement,
+    img: HTMLImageElement,
+    opts = DEFAULT_OPTS
+  ) {
+    const options = { ...DEFAULT_OPTS, ...opts };
     this.gl = canvas.getContext("webgl2")!;
 
     let width = this.gl.drawingBufferWidth;
@@ -53,16 +62,24 @@ export default class Gaussian {
     this.texture = texture;
     this.shader = shader;
 
-    window.onresize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      ({ width, height } = this.gl.canvas);
-      this.gl.viewport(0, 0, width, height);
-      this.fboA = createFBO(this.gl, [width, height]);
-      this.fboB = createFBO(this.gl, [width, height]);
-      shader.uniforms.iResolution = [width, height, 0];
-      this.gl.viewport(0, 0, canvas.width, canvas.height);
-    };
+    if (options.resize) {
+      this.resizeEvent = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ({ width, height } = this.gl.canvas);
+        this.gl.viewport(0, 0, width, height);
+        this.fboA = createFBO(this.gl, [width, height]);
+        this.fboB = createFBO(this.gl, [width, height]);
+        shader.uniforms.iResolution = [width, height, 0];
+        this.gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+      window.addEventListener("resize", this.resizeEvent);
+    }
+  }
+
+  destroy() {
+    if (this.resizeEvent)
+      window.removeEventListener("resize", this.resizeEvent);
   }
 
   draw(iterations: number, radiusDelta = 1) {

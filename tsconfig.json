@@ -1,11 +1,12 @@
 {
   "extends": "@tsconfig/node10/tsconfig.json",
+  "include": ["src/*.ts"],
   "compilerOptions": {
     "lib": ["dom", "ES2017"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "strict": true
   }
 }
