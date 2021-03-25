@@ -140,12 +140,612 @@
       this[globalName] = mainExports;
     }
   }
-})({"4WVAl":[function(require,module,exports) {
+})({"1j6wU":[function(require,module,exports) {
+
+var Refresh = require('react-refresh/runtime');
+
+Refresh.injectIntoGlobalHook(window);
+window.$RefreshReg$ = function() {};
+window.$RefreshSig$ = function() {
+  return function(type) {
+    return type;
+  };
+};
+},{"react-refresh/runtime":"592mh"}],"592mh":[function(require,module,exports) {
+"use strict";
+if ("development" === 'production') {
+  module.exports = require('./cjs/react-refresh-runtime.production.min.js');
+} else {
+  module.exports = require('./cjs/react-refresh-runtime.development.js');
+}
+
+},{"./cjs/react-refresh-runtime.development.js":"2rNh6"}],"2rNh6":[function(require,module,exports) {
+/** @license React v0.9.0
+* react-refresh-runtime.development.js
+*
+* Copyright (c) Facebook, Inc. and its affiliates.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+"use strict";
+if ("development" !== "production") {
+  (function () {
+    "use strict";
+    // ATTENTION
+    // When adding new symbols to this file,
+    // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
+    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    // nor polyfill, then a plain number is used for performance.
+    var REACT_ELEMENT_TYPE = 0xeac7;
+    var REACT_PORTAL_TYPE = 0xeaca;
+    var REACT_FRAGMENT_TYPE = 0xeacb;
+    var REACT_STRICT_MODE_TYPE = 0xeacc;
+    var REACT_PROFILER_TYPE = 0xead2;
+    var REACT_PROVIDER_TYPE = 0xeacd;
+    var REACT_CONTEXT_TYPE = 0xeace;
+    var REACT_FORWARD_REF_TYPE = 0xead0;
+    var REACT_SUSPENSE_TYPE = 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = 0xead8;
+    var REACT_MEMO_TYPE = 0xead3;
+    var REACT_LAZY_TYPE = 0xead4;
+    var REACT_BLOCK_TYPE = 0xead9;
+    var REACT_SERVER_BLOCK_TYPE = 0xeada;
+    var REACT_FUNDAMENTAL_TYPE = 0xead5;
+    var REACT_SCOPE_TYPE = 0xead7;
+    var REACT_OPAQUE_ID_TYPE = 0xeae0;
+    var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
+    var REACT_OFFSCREEN_TYPE = 0xeae2;
+    var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
+    if (typeof Symbol === 'function' && Symbol.for) {
+      var symbolFor = Symbol.for;
+      REACT_ELEMENT_TYPE = symbolFor('react.element');
+      REACT_PORTAL_TYPE = symbolFor('react.portal');
+      REACT_FRAGMENT_TYPE = symbolFor('react.fragment');
+      REACT_STRICT_MODE_TYPE = symbolFor('react.strict_mode');
+      REACT_PROFILER_TYPE = symbolFor('react.profiler');
+      REACT_PROVIDER_TYPE = symbolFor('react.provider');
+      REACT_CONTEXT_TYPE = symbolFor('react.context');
+      REACT_FORWARD_REF_TYPE = symbolFor('react.forward_ref');
+      REACT_SUSPENSE_TYPE = symbolFor('react.suspense');
+      REACT_SUSPENSE_LIST_TYPE = symbolFor('react.suspense_list');
+      REACT_MEMO_TYPE = symbolFor('react.memo');
+      REACT_LAZY_TYPE = symbolFor('react.lazy');
+      REACT_BLOCK_TYPE = symbolFor('react.block');
+      REACT_SERVER_BLOCK_TYPE = symbolFor('react.server.block');
+      REACT_FUNDAMENTAL_TYPE = symbolFor('react.fundamental');
+      REACT_SCOPE_TYPE = symbolFor('react.scope');
+      REACT_OPAQUE_ID_TYPE = symbolFor('react.opaque.id');
+      REACT_DEBUG_TRACING_MODE_TYPE = symbolFor('react.debug_trace_mode');
+      REACT_OFFSCREEN_TYPE = symbolFor('react.offscreen');
+      REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
+    }
+    var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
+    // We never remove these associations.
+    // It's OK to reference families, but use WeakMap/Set for types.
+    var allFamiliesByID = new Map();
+    var allFamiliesByType = new PossiblyWeakMap();
+    var allSignaturesByType = new PossiblyWeakMap();
+    // This WeakMap is read by React, so we only put families
+    // that have actually been edited here. This keeps checks fast.
+    // $FlowIssue
+    var updatedFamiliesByType = new PossiblyWeakMap();
+    // This is cleared on every performReactRefresh() call.
+    // It is an array of [Family, NextType] tuples.
+    var pendingUpdates = [];
+    // This is injected by the renderer via DevTools global hook.
+    var helpersByRendererID = new Map();
+    var helpersByRoot = new Map();
+    // We keep track of mounted roots so we can schedule updates.
+    var mountedRoots = new Set();
+    // If a root captures an error, we remember it so we can retry on edit.
+    var failedRoots = new Set();
+    // In environments that support WeakMap, we also remember the last element for every root.
+    // It needs to be weak because we do this even for roots that failed to mount.
+    // If there is no WeakMap, we won't attempt to do retrying.
+    // $FlowIssue
+    var rootElements = // $FlowIssue
+    typeof WeakMap === 'function' ? new WeakMap() : null;
+    var isPerformingRefresh = false;
+    function computeFullKey(signature) {
+      if (signature.fullKey !== null) {
+        return signature.fullKey;
+      }
+      var fullKey = signature.ownKey;
+      var hooks;
+      try {
+        hooks = signature.getCustomHooks();
+      } catch (err) {
+        // This can happen in an edge case, e.g. if expression like Foo.useSomething
+        // depends on Foo which is lazily initialized during rendering.
+        // In that case just assume we'll have to remount.
+        signature.forceReset = true;
+        signature.fullKey = fullKey;
+        return fullKey;
+      }
+      for (var i = 0; i < hooks.length; i++) {
+        var hook = hooks[i];
+        if (typeof hook !== 'function') {
+          // Something's wrong. Assume we need to remount.
+          signature.forceReset = true;
+          signature.fullKey = fullKey;
+          return fullKey;
+        }
+        var nestedHookSignature = allSignaturesByType.get(hook);
+        if (nestedHookSignature === undefined) {
+          // No signature means Hook wasn't in the source code, e.g. in a library.
+          // We'll skip it because we can assume it won't change during this session.
+          continue;
+        }
+        var nestedHookKey = computeFullKey(nestedHookSignature);
+        if (nestedHookSignature.forceReset) {
+          signature.forceReset = true;
+        }
+        fullKey += '\n---\n' + nestedHookKey;
+      }
+      signature.fullKey = fullKey;
+      return fullKey;
+    }
+    function haveEqualSignatures(prevType, nextType) {
+      var prevSignature = allSignaturesByType.get(prevType);
+      var nextSignature = allSignaturesByType.get(nextType);
+      if (prevSignature === undefined && nextSignature === undefined) {
+        return true;
+      }
+      if (prevSignature === undefined || nextSignature === undefined) {
+        return false;
+      }
+      if (computeFullKey(prevSignature) !== computeFullKey(nextSignature)) {
+        return false;
+      }
+      if (nextSignature.forceReset) {
+        return false;
+      }
+      return true;
+    }
+    function isReactClass(type) {
+      return type.prototype && type.prototype.isReactComponent;
+    }
+    function canPreserveStateBetween(prevType, nextType) {
+      if (isReactClass(prevType) || isReactClass(nextType)) {
+        return false;
+      }
+      if (haveEqualSignatures(prevType, nextType)) {
+        return true;
+      }
+      return false;
+    }
+    function resolveFamily(type) {
+      // Only check updated types to keep lookups fast.
+      return updatedFamiliesByType.get(type);
+    }
+    // If we didn't care about IE11, we could use new Map/Set(iterable).
+    function cloneMap(map) {
+      var clone = new Map();
+      map.forEach(function (value, key) {
+        clone.set(key, value);
+      });
+      return clone;
+    }
+    function cloneSet(set) {
+      var clone = new Set();
+      set.forEach(function (value) {
+        clone.add(value);
+      });
+      return clone;
+    }
+    function performReactRefresh() {
+      if (pendingUpdates.length === 0) {
+        return null;
+      }
+      if (isPerformingRefresh) {
+        return null;
+      }
+      isPerformingRefresh = true;
+      try {
+        var staleFamilies = new Set();
+        var updatedFamilies = new Set();
+        var updates = pendingUpdates;
+        pendingUpdates = [];
+        updates.forEach(function (_ref) {
+          var family = _ref[0], nextType = _ref[1];
+          // Now that we got a real edit, we can create associations
+          // that will be read by the React reconciler.
+          var prevType = family.current;
+          updatedFamiliesByType.set(prevType, family);
+          updatedFamiliesByType.set(nextType, family);
+          family.current = nextType;
+          // Determine whether this should be a re-render or a re-mount.
+          if (canPreserveStateBetween(prevType, nextType)) {
+            updatedFamilies.add(family);
+          } else {
+            staleFamilies.add(family);
+          }
+        });
+        // TODO: rename these fields to something more meaningful.
+        var update = {
+          updatedFamilies: updatedFamilies,
+          // Families that will re-render preserving state
+          staleFamilies: staleFamilies
+        };
+        helpersByRendererID.forEach(function (helpers) {
+          // Even if there are no roots, set the handler on first update.
+          // This ensures that if *new* roots are mounted, they'll use the resolve handler.
+          helpers.setRefreshHandler(resolveFamily);
+        });
+        var didError = false;
+        var firstError = null;
+        // We snapshot maps and sets that are mutated during commits.
+        // If we don't do this, there is a risk they will be mutated while
+        // we iterate over them. For example, trying to recover a failed root
+        // may cause another root to be added to the failed list -- an infinite loop.
+        var failedRootsSnapshot = cloneSet(failedRoots);
+        var mountedRootsSnapshot = cloneSet(mountedRoots);
+        var helpersByRootSnapshot = cloneMap(helpersByRoot);
+        failedRootsSnapshot.forEach(function (root) {
+          var helpers = helpersByRootSnapshot.get(root);
+          if (helpers === undefined) {
+            throw new Error('Could not find helpers for a root. This is a bug in React Refresh.');
+          }
+          if (!failedRoots.has(root)) {}
+          if (rootElements === null) {
+            return;
+          }
+          if (!rootElements.has(root)) {
+            return;
+          }
+          var element = rootElements.get(root);
+          try {
+            helpers.scheduleRoot(root, element);
+          } catch (err) {
+            if (!didError) {
+              didError = true;
+              firstError = err;
+            }
+          }
+        });
+        mountedRootsSnapshot.forEach(function (root) {
+          var helpers = helpersByRootSnapshot.get(root);
+          if (helpers === undefined) {
+            throw new Error('Could not find helpers for a root. This is a bug in React Refresh.');
+          }
+          if (!mountedRoots.has(root)) {}
+          try {
+            helpers.scheduleRefresh(root, update);
+          } catch (err) {
+            if (!didError) {
+              didError = true;
+              firstError = err;
+            }
+          }
+        });
+        if (didError) {
+          throw firstError;
+        }
+        return update;
+      } finally {
+        isPerformingRefresh = false;
+      }
+    }
+    function register(type, id) {
+      {
+        if (type === null) {
+          return;
+        }
+        if (typeof type !== 'function' && typeof type !== 'object') {
+          return;
+        }
+        // This can happen in an edge case, e.g. if we register
+        // return value of a HOC but it returns a cached component.
+        // Ignore anything but the first registration for each type.
+        if (allFamiliesByType.has(type)) {
+          return;
+        }
+        // Create family or remember to update it.
+        // None of this bookkeeping affects reconciliation
+        // until the first performReactRefresh() call above.
+        var family = allFamiliesByID.get(id);
+        if (family === undefined) {
+          family = {
+            current: type
+          };
+          allFamiliesByID.set(id, family);
+        } else {
+          pendingUpdates.push([family, type]);
+        }
+        allFamiliesByType.set(type, family);
+        // Visit inner types because we might not have registered them.
+        if (typeof type === 'object' && type !== null) {
+          switch (type.$$typeof) {
+            case REACT_FORWARD_REF_TYPE:
+              register(type.render, id + '$render');
+              break;
+            case REACT_MEMO_TYPE:
+              register(type.type, id + '$type');
+              break;
+          }
+        }
+      }
+    }
+    function setSignature(type, key) {
+      var forceReset = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      var getCustomHooks = arguments.length > 3 ? arguments[3] : undefined;
+      {
+        allSignaturesByType.set(type, {
+          forceReset: forceReset,
+          ownKey: key,
+          fullKey: null,
+          getCustomHooks: getCustomHooks || (function () {
+            return [];
+          })
+        });
+      }
+    }
+    // This is lazily called during first render for a type.
+    // It captures Hook list at that time so inline requires don't break comparisons.
+    function collectCustomHooksForSignature(type) {
+      {
+        var signature = allSignaturesByType.get(type);
+        if (signature !== undefined) {
+          computeFullKey(signature);
+        }
+      }
+    }
+    function getFamilyByID(id) {
+      {
+        return allFamiliesByID.get(id);
+      }
+    }
+    function getFamilyByType(type) {
+      {
+        return allFamiliesByType.get(type);
+      }
+    }
+    function findAffectedHostInstances(families) {
+      {
+        var affectedInstances = new Set();
+        mountedRoots.forEach(function (root) {
+          var helpers = helpersByRoot.get(root);
+          if (helpers === undefined) {
+            throw new Error('Could not find helpers for a root. This is a bug in React Refresh.');
+          }
+          var instancesForRoot = helpers.findHostInstancesForRefresh(root, families);
+          instancesForRoot.forEach(function (inst) {
+            affectedInstances.add(inst);
+          });
+        });
+        return affectedInstances;
+      }
+    }
+    function injectIntoGlobalHook(globalObject) {
+      {
+        // For React Native, the global hook will be set up by require('react-devtools-core').
+        // That code will run before us. So we need to monkeypatch functions on existing hook.
+        // For React Web, the global hook will be set up by the extension.
+        // This will also run before us.
+        var hook = globalObject.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+        if (hook === undefined) {
+          // However, if there is no DevTools extension, we'll need to set up the global hook ourselves.
+          // Note that in this case it's important that renderer code runs *after* this method call.
+          // Otherwise, the renderer will think that there is no global hook, and won't do the injection.
+          var nextID = 0;
+          globalObject.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook = {
+            renderers: new Map(),
+            supportsFiber: true,
+            inject: function (injected) {
+              return nextID++;
+            },
+            onScheduleFiberRoot: function (id, root, children) {},
+            onCommitFiberRoot: function (id, root, maybePriorityLevel, didError) {},
+            onCommitFiberUnmount: function () {}
+          };
+        }
+        // Here, we just want to get a reference to scheduleRefresh.
+        var oldInject = hook.inject;
+        hook.inject = function (injected) {
+          var id = oldInject.apply(this, arguments);
+          if (typeof injected.scheduleRefresh === 'function' && typeof injected.setRefreshHandler === 'function') {
+            // This version supports React Refresh.
+            helpersByRendererID.set(id, injected);
+          }
+          return id;
+        };
+        // Do the same for any already injected roots.
+        // This is useful if ReactDOM has already been initialized.
+        // https://github.com/facebook/react/issues/17626
+        hook.renderers.forEach(function (injected, id) {
+          if (typeof injected.scheduleRefresh === 'function' && typeof injected.setRefreshHandler === 'function') {
+            // This version supports React Refresh.
+            helpersByRendererID.set(id, injected);
+          }
+        });
+        // We also want to track currently mounted roots.
+        var oldOnCommitFiberRoot = hook.onCommitFiberRoot;
+        var oldOnScheduleFiberRoot = hook.onScheduleFiberRoot || (function () {});
+        hook.onScheduleFiberRoot = function (id, root, children) {
+          if (!isPerformingRefresh) {
+            // If it was intentionally scheduled, don't attempt to restore.
+            // This includes intentionally scheduled unmounts.
+            failedRoots.delete(root);
+            if (rootElements !== null) {
+              rootElements.set(root, children);
+            }
+          }
+          return oldOnScheduleFiberRoot.apply(this, arguments);
+        };
+        hook.onCommitFiberRoot = function (id, root, maybePriorityLevel, didError) {
+          var helpers = helpersByRendererID.get(id);
+          if (helpers === undefined) {
+            return;
+          }
+          helpersByRoot.set(root, helpers);
+          var current = root.current;
+          var alternate = current.alternate;
+          // We need to determine whether this root has just (un)mounted.
+          // This logic is copy-pasted from similar logic in the DevTools backend.
+          // If this breaks with some refactoring, you'll want to update DevTools too.
+          if (alternate !== null) {
+            var wasMounted = alternate.memoizedState != null && alternate.memoizedState.element != null;
+            var isMounted = current.memoizedState != null && current.memoizedState.element != null;
+            if (!wasMounted && isMounted) {
+              // Mount a new root.
+              mountedRoots.add(root);
+              failedRoots.delete(root);
+            } else if (wasMounted && isMounted) ; else if (wasMounted && !isMounted) {
+              // Unmount an existing root.
+              mountedRoots.delete(root);
+              if (didError) {
+                // We'll remount it on future edits.
+                failedRoots.add(root);
+              } else {
+                helpersByRoot.delete(root);
+              }
+            } else if (!wasMounted && !isMounted) {
+              if (didError) {
+                // We'll remount it on future edits.
+                failedRoots.add(root);
+              }
+            }
+          } else {
+            // Mount a new root.
+            mountedRoots.add(root);
+          }
+          return oldOnCommitFiberRoot.apply(this, arguments);
+        };
+      }
+    }
+    function hasUnrecoverableErrors() {
+      // TODO: delete this after removing dependency in RN.
+      return false;
+    }
+    // Exposed for testing.
+    function _getMountedRootCount() {
+      {
+        return mountedRoots.size;
+      }
+    }
+    // This is a wrapper over more primitive functions for setting signature.
+    // Signatures let us decide whether the Hook order has changed on refresh.
+    // 
+    // This function is intended to be used as a transform target, e.g.:
+    // var _s = createSignatureFunctionForTransform()
+    // 
+    // function Hello() {
+    // const [foo, setFoo] = useState(0);
+    // const value = useCustomHook();
+    // _s(); /* Second call triggers collecting the custom Hook list.
+    // * This doesn't happen during the module evaluation because we
+    // * don't want to change the module order with inline requires.
+    // * Next calls are noops. */
+    // return <h1>Hi</h1>;
+    // }
+    // 
+    // /* First call specifies the signature: */
+    // _s(
+    // Hello,
+    // 'useState{[foo, setFoo]}(0)',
+    // () => [useCustomHook], /* Lazy to avoid triggering inline requires */
+    // );
+    function createSignatureFunctionForTransform() {
+      {
+        // We'll fill in the signature in two steps.
+        // First, we'll know the signature itself. This happens outside the component.
+        // Then, we'll know the references to custom Hooks. This happens inside the component.
+        // After that, the returned function will be a fast path no-op.
+        var status = 'needsSignature';
+        var savedType;
+        var hasCustomHooks;
+        return function (type, key, forceReset, getCustomHooks) {
+          switch (status) {
+            case 'needsSignature':
+              if (type !== undefined) {
+                // If we received an argument, this is the initial registration call.
+                savedType = type;
+                hasCustomHooks = typeof getCustomHooks === 'function';
+                setSignature(type, key, forceReset, getCustomHooks);
+                // The next call we expect is from inside a function, to fill in the custom Hooks.
+                status = 'needsCustomHooks';
+              }
+              break;
+            case 'needsCustomHooks':
+              if (hasCustomHooks) {
+                collectCustomHooksForSignature(savedType);
+              }
+              status = 'resolved';
+              break;
+          }
+          return type;
+        };
+      }
+    }
+    function isLikelyComponentType(type) {
+      {
+        switch (typeof type) {
+          case 'function':
+            {
+              // First, deal with classes.
+              if (type.prototype != null) {
+                if (type.prototype.isReactComponent) {
+                  // React class.
+                  return true;
+                }
+                var ownNames = Object.getOwnPropertyNames(type.prototype);
+                if (ownNames.length > 1 || ownNames[0] !== 'constructor') {
+                  // This looks like a class.
+                  return false;
+                }
+                // eslint-disable-next-line no-proto
+                if (type.prototype.__proto__ !== Object.prototype) {
+                  // It has a superclass.
+                  return false;
+                }
+              }
+              // For plain functions and arrows, use name as a heuristic.
+              var name = type.name || type.displayName;
+              return typeof name === 'string' && (/^[A-Z]/).test(name);
+            }
+          case 'object':
+            {
+              if (type != null) {
+                switch (type.$$typeof) {
+                  case REACT_FORWARD_REF_TYPE:
+                  case REACT_MEMO_TYPE:
+                    // Definitely React components.
+                    return true;
+                  default:
+                    return false;
+                }
+              }
+              return false;
+            }
+          default:
+            {
+              return false;
+            }
+        }
+      }
+    }
+    exports._getMountedRootCount = _getMountedRootCount;
+    exports.collectCustomHooksForSignature = collectCustomHooksForSignature;
+    exports.createSignatureFunctionForTransform = createSignatureFunctionForTransform;
+    exports.findAffectedHostInstances = findAffectedHostInstances;
+    exports.getFamilyByID = getFamilyByID;
+    exports.getFamilyByType = getFamilyByType;
+    exports.hasUnrecoverableErrors = hasUnrecoverableErrors;
+    exports.injectIntoGlobalHook = injectIntoGlobalHook;
+    exports.isLikelyComponentType = isLikelyComponentType;
+    exports.performReactRefresh = performReactRefresh;
+    exports.register = register;
+    exports.setSignature = setSignature;
+  })();
+}
+
+},{}],"5SEBf":[function(require,module,exports) {
 var HMR_HOST = null;
 var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d751713988987e9331980363e24189ce";
-module.bundle.HMR_BUNDLE_ID = "5eb402113aadba83395de99934ba3c4b";
+module.bundle.HMR_BUNDLE_ID = "e57abe7f09ec81b6ec9f579a8e0f6adf";
 // @flow
 /*global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE*/
 /*::
@@ -441,7 +1041,7 @@ id) /*: string*/
   acceptedAssets[id] = true;
 }
 
-},{}],"6vS60":[function(require,module,exports) {
+},{}],"1Lb9z":[function(require,module,exports) {
 var _rafLoop = require("raf-loop");
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 var _rafLoopDefault = _parcelHelpers.interopDefault(_rafLoop);
@@ -461,9 +1061,6 @@ var _srcDefault = _parcelHelpers.interopDefault(_src);
   const blur = new _srcDefault.default(canvas, img);
   blur.draw(2);
   const slider = document.querySelector("input");
-  const output = document.getElementById("output");
-  const blurRadius = 0;
-  output.innerHTML = `Blur radius: ${blurRadius}`;
   let speed = 1;
   slider.oninput = () => {
     speed = parseInt(slider.value, 10);
@@ -478,7 +1075,7 @@ var _srcDefault = _parcelHelpers.interopDefault(_src);
   _rafLoopDefault.default(render).start();
 })();
 
-},{"raf-loop":"3ei0W","../src":"3rfh7","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","url:../img/demo.jpg":"wHf8o"}],"3ei0W":[function(require,module,exports) {
+},{"raf-loop":"3ei0W","url:../img/demo.jpg":"5Wewp","../src":"4YB6P","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"3ei0W":[function(require,module,exports) {
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var now = require('right-now')
@@ -523,32 +1120,36 @@ Engine.prototype.tick = function() {
     this.emit('tick', dt)
     this.last = time
 }
-},{"inherits":"1EUwN","events":"2jD7P","right-now":"2wEm4","raf":"5SXY1"}],"1EUwN":[function(require,module,exports) {
+},{"inherits":"1EUwN","events":"1LHgi","right-now":"2wEm4","raf":"5SXY1"}],"1EUwN":[function(require,module,exports) {
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      })
+    }
   };
 } else {
   // old school shim for old browsers
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
+    }
   }
 }
 
-},{}],"2jD7P":[function(require,module,exports) {
+},{}],"1LHgi":[function(require,module,exports) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1330,7 +1931,55 @@ process.umask = function () {
   return 0;
 };
 
-},{}],"3rfh7":[function(require,module,exports) {
+},{}],"5Wewp":[function(require,module,exports) {
+module.exports = require('./bundle-url').getBundleURL() + "demo.7e7405d6.jpg"
+},{"./bundle-url":"3seVR"}],"3seVR":[function(require,module,exports) {
+"use strict";
+
+/* globals document:readonly */
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+
+
+function getOrigin(url) {
+  let matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+
+  if (!matches) {
+    throw new Error('Origin not found');
+  }
+
+  return matches[0];
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+},{}],"4YB6P":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _aBigTriangle = require("a-big-triangle");
@@ -1345,8 +1994,15 @@ var _vertGlsl = require("./vert.glsl");
 var _vertGlslDefault = _parcelHelpers.interopDefault(_vertGlsl);
 var _fragGlsl = require("./frag.glsl");
 var _fragGlslDefault = _parcelHelpers.interopDefault(_fragGlsl);
+const DEFAULT_OPTS = {
+  resize: true
+};
 class Gaussian {
-  constructor(canvas, img) {
+  constructor(canvas, img, opts = DEFAULT_OPTS) {
+    const options = {
+      ...DEFAULT_OPTS,
+      ...opts
+    };
     this.gl = canvas.getContext("webgl2");
     let width = this.gl.drawingBufferWidth;
     let height = this.gl.drawingBufferHeight;
@@ -1371,16 +2027,22 @@ class Gaussian {
     textures.forEach(setParameters);
     this.texture = texture;
     this.shader = shader;
-    window.onresize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      ({width, height} = this.gl.canvas);
-      this.gl.viewport(0, 0, width, height);
-      this.fboA = _glFboDefault.default(this.gl, [width, height]);
-      this.fboB = _glFboDefault.default(this.gl, [width, height]);
-      shader.uniforms.iResolution = [width, height, 0];
-      this.gl.viewport(0, 0, canvas.width, canvas.height);
-    };
+    if (options.resize) {
+      this.resizeEvent = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ({width, height} = this.gl.canvas);
+        this.gl.viewport(0, 0, width, height);
+        this.fboA = _glFboDefault.default(this.gl, [width, height]);
+        this.fboB = _glFboDefault.default(this.gl, [width, height]);
+        shader.uniforms.iResolution = [width, height, 0];
+        this.gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+      window.addEventListener("resize", this.resizeEvent);
+    }
+  }
+  destroy() {
+    if (this.resizeEvent) window.removeEventListener("resize", this.resizeEvent);
   }
   draw(iterations, radiusDelta = 1) {
     let {fboA: writeBuffer, fboB: readBuffer} = this;
@@ -1417,7 +2079,7 @@ class Gaussian {
 }
 exports.default = Gaussian;
 
-},{"a-big-triangle":"57ayC","gl-shader":"3CLtp","gl-fbo":"1gsJP","gl-texture2d":"4BWiO","./vert.glsl":"3VGt9","./frag.glsl":"1L1IV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"57ayC":[function(require,module,exports) {
+},{"a-big-triangle":"m7jcB","gl-shader":"51HC7","gl-fbo":"299YY","gl-texture2d":"1Tmad","./vert.glsl":"28ujG","./frag.glsl":"6efHL","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"m7jcB":[function(require,module,exports) {
 'use strict'
 
 var weakMap      = typeof WeakMap === 'undefined' ? require('weak-map') : WeakMap
@@ -1448,7 +2110,7 @@ function createABigTriangle(gl) {
 
 module.exports = createABigTriangle
 
-},{"weak-map":"6RA29","gl-buffer":"2jsOe","gl-vao":"3Rgk1"}],"6RA29":[function(require,module,exports) {
+},{"weak-map":"5zGJ5","gl-buffer":"3VNiC","gl-vao":"7y3tU"}],"5zGJ5":[function(require,module,exports) {
 // Copyright (C) 2011 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -2135,7 +2797,7 @@ module.exports = createABigTriangle
   }
 })();
 
-},{}],"2jsOe":[function(require,module,exports) {
+},{}],"3VNiC":[function(require,module,exports) {
 "use strict"
 
 var pool = require("typedarray-pool")
@@ -2289,7 +2951,7 @@ function createBuffer(gl, data, type, usage) {
 
 module.exports = createBuffer
 
-},{"typedarray-pool":"359dP","ndarray-ops":"QDHbp","ndarray":"4TtXK"}],"359dP":[function(require,module,exports) {
+},{"typedarray-pool":"6225K","ndarray-ops":"5JwKG","ndarray":"1fcZc"}],"6225K":[function(require,module,exports) {
 "use strict";
 var global = arguments[3];
 var Buffer = require("buffer").Buffer;
@@ -2469,7 +3131,7 @@ exports.clearCache = function clearCache() {
   }
 };
 
-},{"buffer":"3susO","bit-twiddle":"4favD","dup":"3Qi8X"}],"3susO":[function(require,module,exports) {
+},{"buffer":"3susO","bit-twiddle":"2qip6","dup":"2iCKp"}],"3susO":[function(require,module,exports) {
 /*!
 * The buffer module from node.js, for the browser.
 *
@@ -4179,7 +4841,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],"4favD":[function(require,module,exports) {
+},{}],"2qip6":[function(require,module,exports) {
 /**
  * Bit twiddling hacks for JavaScript.
  *
@@ -4385,7 +5047,7 @@ exports.nextCombination = function(v) {
 }
 
 
-},{}],"3Qi8X":[function(require,module,exports) {
+},{}],"2iCKp":[function(require,module,exports) {
 "use strict"
 
 function dupe_array(count, value, i) {
@@ -4435,7 +5097,7 @@ function dupe(count, value) {
 }
 
 module.exports = dupe
-},{}],"QDHbp":[function(require,module,exports) {
+},{}],"5JwKG":[function(require,module,exports) {
 "use strict"
 
 var compile = require("cwise-compiler")
@@ -4898,7 +5560,7 @@ exports.equals = compile({
 
 
 
-},{"cwise-compiler":"Js1GP"}],"Js1GP":[function(require,module,exports) {
+},{"cwise-compiler":"4sLgn"}],"4sLgn":[function(require,module,exports) {
 "use strict"
 
 var createThunk = require("./lib/thunk.js")
@@ -5009,7 +5671,7 @@ function compileCwise(user_args) {
 
 module.exports = compileCwise
 
-},{"./lib/thunk.js":"4mwRe"}],"4mwRe":[function(require,module,exports) {
+},{"./lib/thunk.js":"yaWvw"}],"yaWvw":[function(require,module,exports) {
 "use strict"
 
 // The function below is called when constructing a cwise function object, and does the following:
@@ -5097,7 +5759,7 @@ function createThunk(proc) {
 
 module.exports = createThunk
 
-},{"./compile.js":"51unh"}],"51unh":[function(require,module,exports) {
+},{"./compile.js":"3CsSC"}],"3CsSC":[function(require,module,exports) {
 "use strict"
 
 var uniq = require("uniq")
@@ -5457,7 +6119,7 @@ function generateCWiseOp(proc, typesig) {
 }
 module.exports = generateCWiseOp
 
-},{"uniq":"7IR4g"}],"7IR4g":[function(require,module,exports) {
+},{"uniq":"5fwHB"}],"5fwHB":[function(require,module,exports) {
 "use strict"
 
 function unique_pred(list, compare) {
@@ -5516,7 +6178,7 @@ function unique(list, compare, sorted) {
 
 module.exports = unique
 
-},{}],"4TtXK":[function(require,module,exports) {
+},{}],"1fcZc":[function(require,module,exports) {
 var iota = require("iota-array")
 var isBuffer = require("is-buffer")
 
@@ -5861,7 +6523,7 @@ function wrappedNDArrayCtor(data, shape, stride, offset) {
 
 module.exports = wrappedNDArrayCtor
 
-},{"iota-array":"6QVqj","is-buffer":"UiSR7"}],"6QVqj":[function(require,module,exports) {
+},{"iota-array":"4CxTf","is-buffer":"5eHrk"}],"4CxTf":[function(require,module,exports) {
 "use strict"
 
 function iota(n) {
@@ -5873,7 +6535,7 @@ function iota(n) {
 }
 
 module.exports = iota
-},{}],"UiSR7":[function(require,module,exports) {
+},{}],"5eHrk":[function(require,module,exports) {
 /*!
  * Determine if an object is a Buffer
  *
@@ -5896,7 +6558,7 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],"3Rgk1":[function(require,module,exports) {
+},{}],"7y3tU":[function(require,module,exports) {
 "use strict"
 
 var createVAONative = require("./lib/vao-native.js")
@@ -5925,7 +6587,7 @@ function createVAO(gl, attributes, elements, elementsType) {
 
 module.exports = createVAO
 
-},{"./lib/vao-native.js":"1G5yJ","./lib/vao-emulated.js":"1oW27"}],"1G5yJ":[function(require,module,exports) {
+},{"./lib/vao-native.js":"6NLGW","./lib/vao-emulated.js":"HhBko"}],"6NLGW":[function(require,module,exports) {
 "use strict"
 
 var bindAttribs = require("./do-bind.js")
@@ -6013,7 +6675,7 @@ function createVAONative(gl, ext) {
 }
 
 module.exports = createVAONative
-},{"./do-bind.js":"1hlDL"}],"1hlDL":[function(require,module,exports) {
+},{"./do-bind.js":"6Ls96"}],"6Ls96":[function(require,module,exports) {
 "use strict"
 
 function doBind(gl, elements, attributes) {
@@ -6068,7 +6730,7 @@ function doBind(gl, elements, attributes) {
 }
 
 module.exports = doBind
-},{}],"1oW27":[function(require,module,exports) {
+},{}],"HhBko":[function(require,module,exports) {
 "use strict"
 
 var bindAttribs = require("./do-bind.js")
@@ -6108,7 +6770,7 @@ function createVAOEmulated(gl) {
 }
 
 module.exports = createVAOEmulated
-},{"./do-bind.js":"1hlDL"}],"3CLtp":[function(require,module,exports) {
+},{"./do-bind.js":"6Ls96"}],"51HC7":[function(require,module,exports) {
 'use strict'
 
 var createUniformWrapper   = require('./lib/create-uniforms')
@@ -6374,7 +7036,7 @@ function createShader(
 
 module.exports = createShader
 
-},{"./lib/create-uniforms":"6ViDN","./lib/create-attributes":"33hK7","./lib/reflect":"fLAvA","./lib/shader-cache":"4jeNT","./lib/runtime-reflect":"47URg","./lib/GLError":"4bAQv"}],"6ViDN":[function(require,module,exports) {
+},{"./lib/create-uniforms":"6FGM6","./lib/create-attributes":"15sci","./lib/reflect":"2vb4M","./lib/shader-cache":"1vPgr","./lib/runtime-reflect":"34BY5","./lib/GLError":"7IOuJ"}],"6FGM6":[function(require,module,exports) {
 'use strict'
 
 var coallesceUniforms = require('./reflect')
@@ -6567,7 +7229,7 @@ function createUniformWrapper(gl, wrapper, uniforms, locations) {
   }
 }
 
-},{"./reflect":"fLAvA","./GLError":"4bAQv"}],"fLAvA":[function(require,module,exports) {
+},{"./reflect":"2vb4M","./GLError":"7IOuJ"}],"2vb4M":[function(require,module,exports) {
 'use strict'
 
 module.exports = makeReflectTypes
@@ -6625,7 +7287,7 @@ function makeReflectTypes(uniforms, useIndex) {
   }
   return obj
 }
-},{}],"4bAQv":[function(require,module,exports) {
+},{}],"7IOuJ":[function(require,module,exports) {
 function GLError (rawError, shortMessage, longMessage) {
     this.shortMessage = shortMessage || ''
     this.longMessage = longMessage || ''
@@ -6640,7 +7302,7 @@ GLError.prototype.name = 'GLError'
 GLError.prototype.constructor = GLError
 module.exports = GLError
 
-},{}],"33hK7":[function(require,module,exports) {
+},{}],"15sci":[function(require,module,exports) {
 'use strict'
 
 module.exports = createAttributeWrapper
@@ -6905,7 +7567,7 @@ function createAttributeWrapper(
   return obj
 }
 
-},{"./GLError":"4bAQv"}],"4jeNT":[function(require,module,exports) {
+},{"./GLError":"7IOuJ"}],"1vPgr":[function(require,module,exports) {
 'use strict'
 
 exports.shader   = getShaderReference
@@ -7043,7 +7705,7 @@ function createProgram(gl, vref, fref, attribs, locations) {
   return getCache(gl).getProgram(vref, fref, attribs, locations)
 }
 
-},{"./GLError":"4bAQv","gl-format-compiler-error":"4tZ1V","weakmap-shim":"4ZwHH"}],"4tZ1V":[function(require,module,exports) {
+},{"./GLError":"7IOuJ","gl-format-compiler-error":"4auNE","weakmap-shim":"1hCta"}],"4auNE":[function(require,module,exports) {
 
 var sprintf = require('sprintf-js').sprintf;
 var glConstants = require('gl-constants/lookup');
@@ -7098,7 +7760,7 @@ function formatCompilerError(errLog, src, type) {
 }
 
 
-},{"sprintf-js":"4es8g","gl-constants/lookup":"11nUv","glsl-shader-name":"2i30K","add-line-numbers":"z1Jb1"}],"4es8g":[function(require,module,exports) {
+},{"sprintf-js":"2pV5e","gl-constants/lookup":"5ObFX","glsl-shader-name":"1Ne3I","add-line-numbers":"1yvTp"}],"2pV5e":[function(require,module,exports) {
 var define;
 /*global window, exports, define*/
 !(function () {
@@ -7296,14 +7958,14 @@ var define;
   }
 })();
 
-},{}],"11nUv":[function(require,module,exports) {
+},{}],"5ObFX":[function(require,module,exports) {
 var gl10 = require('./1.0/numbers')
 
 module.exports = function lookupConstant (number) {
   return gl10[number]
 }
 
-},{"./1.0/numbers":"SE4Uh"}],"SE4Uh":[function(require,module,exports) {
+},{"./1.0/numbers":"1v6EQ"}],"1v6EQ":[function(require,module,exports) {
 module.exports = {
   0: 'NONE',
   1: 'ONE',
@@ -7603,7 +8265,7 @@ module.exports = {
   37444: 'BROWSER_DEFAULT_WEBGL'
 }
 
-},{}],"2i30K":[function(require,module,exports) {
+},{}],"1Ne3I":[function(require,module,exports) {
 var tokenize = require('glsl-tokenizer')
 var atob     = require('atob-lite')
 
@@ -7628,7 +8290,7 @@ function getName(src) {
   }
 }
 
-},{"glsl-tokenizer":"2uyxM","atob-lite":"50wkZ"}],"2uyxM":[function(require,module,exports) {
+},{"glsl-tokenizer":"4iLP0","atob-lite":"4lifc"}],"4iLP0":[function(require,module,exports) {
 var tokenize = require('./index')
 
 module.exports = tokenizeString
@@ -7643,7 +8305,7 @@ function tokenizeString(str, opt) {
   return tokens
 }
 
-},{"./index":"OSC9Z"}],"OSC9Z":[function(require,module,exports) {
+},{"./index":"5x4VO"}],"5x4VO":[function(require,module,exports) {
 module.exports = tokenize
 
 var literals100 = require('./lib/literals')
@@ -8020,7 +8682,7 @@ function tokenize(opt) {
   }
 }
 
-},{"./lib/literals":"54Jmq","./lib/operators":"v2KnH","./lib/builtins":"2jmca","./lib/literals-300es":"6kRaE","./lib/builtins-300es":"76iSU"}],"54Jmq":[function(require,module,exports) {
+},{"./lib/literals":"47s6b","./lib/operators":"5zsLM","./lib/builtins":"1P3lE","./lib/literals-300es":"rOrKh","./lib/builtins-300es":"4L60M"}],"47s6b":[function(require,module,exports) {
 module.exports = [
   // current
     'precision'
@@ -8116,7 +8778,7 @@ module.exports = [
   , 'using'
 ]
 
-},{}],"v2KnH":[function(require,module,exports) {
+},{}],"5zsLM":[function(require,module,exports) {
 module.exports = [
     '<<='
   , '>>='
@@ -8165,7 +8827,7 @@ module.exports = [
   , '}'
 ]
 
-},{}],"2jmca":[function(require,module,exports) {
+},{}],"1P3lE":[function(require,module,exports) {
 module.exports = [
   // Keep this list sorted
   'abs'
@@ -8317,7 +8979,7 @@ module.exports = [
   , 'textureCubeGradEXT'
 ]
 
-},{}],"6kRaE":[function(require,module,exports) {
+},{}],"rOrKh":[function(require,module,exports) {
 var v100 = require('./literals')
 
 module.exports = v100.slice().concat([
@@ -8406,7 +9068,7 @@ module.exports = v100.slice().concat([
   , 'usampler2DMSArray'
 ])
 
-},{"./literals":"54Jmq"}],"76iSU":[function(require,module,exports) {
+},{"./literals":"47s6b"}],"4L60M":[function(require,module,exports) {
 // 300es builtins/reserved words that were previously valid in v100
 var v100 = require('./builtins')
 
@@ -8477,12 +9139,12 @@ module.exports = v100.concat([
   , 'textureProjGradOffset'
 ])
 
-},{"./builtins":"2jmca"}],"50wkZ":[function(require,module,exports) {
+},{"./builtins":"1P3lE"}],"4lifc":[function(require,module,exports) {
 module.exports = function _atob(str) {
   return atob(str)
 }
 
-},{}],"z1Jb1":[function(require,module,exports) {
+},{}],"1yvTp":[function(require,module,exports) {
 var padLeft = require('pad-left')
 
 module.exports = addLineNumbers
@@ -8500,7 +9162,7 @@ function addLineNumbers (string, start, delim) {
   }).join('\n')
 }
 
-},{"pad-left":"3T94q"}],"3T94q":[function(require,module,exports) {
+},{"pad-left":"5ahwv"}],"5ahwv":[function(require,module,exports) {
 /*!
  * pad-left <https://github.com/jonschlinkert/pad-left>
  *
@@ -8516,7 +9178,7 @@ module.exports = function padLeft(str, num, ch) {
   ch = typeof ch !== 'undefined' ? (ch + '') : ' ';
   return repeat(ch, num) + str;
 };
-},{"repeat-string":"2vhaB"}],"2vhaB":[function(require,module,exports) {
+},{"repeat-string":"4jha0"}],"4jha0":[function(require,module,exports) {
 /*!
  * repeat-string <https://github.com/jonschlinkert/repeat-string>
  *
@@ -8588,7 +9250,7 @@ function repeat(str, num) {
   return res;
 }
 
-},{}],"4ZwHH":[function(require,module,exports) {
+},{}],"1hCta":[function(require,module,exports) {
 // Original - @Gozola.
 // https://gist.github.com/Gozala/1269991
 // This is a reimplemented version (with a few bug fixes).
@@ -8619,7 +9281,7 @@ function weakMap() {
     }
 }
 
-},{"./create-store.js":"6Hjri"}],"6Hjri":[function(require,module,exports) {
+},{"./create-store.js":"38E85"}],"38E85":[function(require,module,exports) {
 var hiddenStore = require('./hidden-store.js');
 
 module.exports = createStore;
@@ -8640,7 +9302,7 @@ function createStore() {
     };
 }
 
-},{"./hidden-store.js":"7IaSh"}],"7IaSh":[function(require,module,exports) {
+},{"./hidden-store.js":"1qX6R"}],"1qX6R":[function(require,module,exports) {
 module.exports = hiddenStore;
 
 function hiddenStore(obj, key) {
@@ -8658,7 +9320,7 @@ function hiddenStore(obj, key) {
     return store;
 }
 
-},{}],"47URg":[function(require,module,exports) {
+},{}],"34BY5":[function(require,module,exports) {
 'use strict'
 
 exports.uniforms    = runtimeUniforms
@@ -8738,7 +9400,7 @@ function runtimeAttributes(gl, program) {
   return result
 }
 
-},{}],"1gsJP":[function(require,module,exports) {
+},{}],"299YY":[function(require,module,exports) {
 'use strict'
 
 var createTexture = require('gl-texture2d')
@@ -9205,7 +9867,7 @@ function createFBO(gl, width, height, options) {
     WEBGL_draw_buffers)
 }
 
-},{"gl-texture2d":"4BWiO"}],"4BWiO":[function(require,module,exports) {
+},{"gl-texture2d":"1Tmad"}],"1Tmad":[function(require,module,exports) {
 'use strict'
 
 var ndarray = require('ndarray')
@@ -9768,9 +10430,9 @@ function createTexture2D(gl) {
   throw new Error('gl-texture2d: Invalid arguments for texture2d constructor')
 }
 
-},{"ndarray":"4TtXK","ndarray-ops":"QDHbp","typedarray-pool":"359dP"}],"3VGt9":[function(require,module,exports) {
+},{"ndarray":"1fcZc","ndarray-ops":"5JwKG","typedarray-pool":"6225K"}],"28ujG":[function(require,module,exports) {
 module.exports="precision mediump float;\n#define GLSLIFY 1\n\nattribute vec2 position;\n\nvoid main() {\n  gl_Position = vec4(position, 1, 1);\n}";
-},{}],"1L1IV":[function(require,module,exports) {
+},{}],"6efHL":[function(require,module,exports) {
 module.exports="precision highp float;\n#define GLSLIFY 1\n\nuniform vec3 iResolution;\nuniform sampler2D iChannel0;\nuniform bool flip;\nuniform vec2 direction;\n\nvec4 blur9(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n  vec4 color = vec4(0.0);\n  vec2 off1 = vec2(1.3846153846) * direction;\n  vec2 off2 = vec2(3.2307692308) * direction;\n  color += texture2D(image, uv) * 0.2270270270;\n  color += texture2D(image, uv + (off1 / resolution)) * 0.3162162162;\n  color += texture2D(image, uv - (off1 / resolution)) * 0.3162162162;\n  color += texture2D(image, uv + (off2 / resolution)) * 0.0702702703;\n  color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;\n  return color;\n}\n\nvoid main() {\n  vec2 uv = vec2(gl_FragCoord.xy / iResolution.xy);\n\n  if (flip) {\n    uv.y = 1.0 - uv.y;\n  }\n\n  gl_FragColor = blur9(iChannel0, uv, iResolution.xy, direction);\n}\n";
 },{}],"5gA8y":[function(require,module,exports) {
 "use strict";
@@ -9814,54 +10476,6 @@ exports.export = function (dest, destName, get) {
     get: get
   });
 };
-},{}],"wHf8o":[function(require,module,exports) {
-module.exports = require('./bundle-url').getBundleURL() + "demo.56f0f085.jpg"
-},{"./bundle-url":"3seVR"}],"3seVR":[function(require,module,exports) {
-"use strict";
+},{}]},["1j6wU","5SEBf","1Lb9z"], "1Lb9z", "parcelRequirec181")
 
-/* globals document:readonly */
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-
-
-function getOrigin(url) {
-  let matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
-
-  if (!matches) {
-    throw new Error('Origin not found');
-  }
-
-  return matches[0];
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-},{}]},["4WVAl","6vS60"], "6vS60", "parcelRequireaeba")
-
-//# sourceMappingURL=index.34ba3c4b.js.map
+//# sourceMappingURL=index.8e0f6adf.js.map
