@@ -7,10 +7,15 @@ declare module "url:*" {
 }
 
 declare module "raf-loop" {
+  export type Start = {
+    start: () => void;
+    stop: () => void;
+    tick: () => void;
+  };
   declare function loop(
     fn: (time: number) => void
   ): {
-    start: () => void;
+    start: () => Start;
   };
   export default loop;
 }

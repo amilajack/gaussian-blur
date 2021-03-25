@@ -10,7 +10,15 @@
     "url": "https://github.com/amilajack"
   },
   "dependencies": {
-    "raf-loop": "^1.1.3"
+    "raf-loop": "^1.1.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "leva": "^0.8.1"
+  },
+  "devDependencies": {
+    "@parcel/transformer-glsl": "2.0.0-beta.2",
+    "@parcel/transformer-image": "2.0.0-beta.2",
+    "parcel": "^2.0.0-beta.2"
   },
   "keywords": [
     "glsl",
@@ -41,10 +49,5 @@
     "build": "parcel build index.html --dist-dir dist --public-url /gaussian-blur",
     "deploy": "yarn build && gh-pages -d dist && rm -rf dist",
     "start": "parcel index.html"
-  },
-  "devDependencies": {
-    "parcel": "^2.0.0-beta.2",
-    "@parcel/transformer-glsl": "2.0.0-beta.2",
-    "@parcel/transformer-image": "2.0.0-beta.2"
   }
 }

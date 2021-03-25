@@ -1,12 +1,13 @@
 {
   "extends": "@tsconfig/node10/tsconfig.json",
-  "include": ["src/*.ts", "tools/*.ts", "demo/*.ts"],
+  "include": ["src/*.ts", "tools/*.ts", "demo/*.ts", "demo/app.tsx"],
   "compilerOptions": {
     "lib": ["dom", "ES2017"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "dist",
+    "jsx": "react",
     "strict": true
   }
 }
