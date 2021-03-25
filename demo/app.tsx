@@ -50,14 +50,14 @@ function Demo() {
   const controls = useControls({
     animate: true,
     radius: {
-      value: 4,
-      min: 0,
+      value: 1,
+      min: 1,
       max: 10,
       step: 1,
     },
     speed: {
-      value: 4,
-      min: 0,
+      value: 2,
+      min: 1,
       max: 10,
       step: 1,
     },
