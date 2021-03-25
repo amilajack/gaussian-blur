@@ -53,7 +53,8 @@
     "build:demo": "cd demo && yarn && yarn build",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "test": "yarn lint && yarn build && yarn build:demo",
-    "start": "cd demo && yarn start"
+    "start": "cd demo && yarn start",
+    "deploy": "cd demo && yarn deploy"
   },
   "devDependencies": {
     "@tsconfig/node10": "^1.0.7",
