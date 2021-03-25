@@ -18,6 +18,7 @@
   "devDependencies": {
     "@parcel/transformer-glsl": "2.0.0-beta.2",
     "@parcel/transformer-image": "2.0.0-beta.2",
+    "gh-pages": "^3.1.0",
     "parcel": "^2.0.0-beta.2"
   },
   "keywords": [
@@ -46,7 +47,7 @@
     "url": "https://github.com/amilajack/gaussian-blur/issues"
   },
   "scripts": {
-    "build": "parcel build index.html --dist-dir dist --public-url /gaussian-blur",
+    "build": "parcel build index.html --dist-dir demo/dist --public-url /gaussian-blur",
     "deploy": "yarn build && gh-pages -d dist && rm -rf dist",
     "start": "parcel index.html"
   }
