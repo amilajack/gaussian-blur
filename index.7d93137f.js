@@ -1074,7 +1074,7 @@ try {
     });
     return _extends.apply(this, arguments);
   }
-  function Blur({radius = 1, speed = 1, animate = true}) {
+  function Blur({radius = 1, iterations = 8, speed = 1, animate = true}) {
     _s();
     _react.useEffect(() => {
       const canvas = document.querySelector("canvas");
@@ -1086,12 +1086,11 @@ try {
       let rafId;
       img.onload = () => {
         blur = new _srcDefault.default(canvas, img);
-        blur.draw(2, radius);
+        blur.draw(iterations, radius);
         let time = 0;
         function render(dt) {
           time += dt * speed / 1000;
           const anim = Math.sin(time) * 0.5 + 0.5;
-          const iterations = 8;
           blur.draw(iterations, anim);
         }
         if (animate) {
@@ -1108,7 +1107,7 @@ try {
         __self: this,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 46,
+          lineNumber: 51,
           columnNumber: 10
         }
       })
@@ -1121,14 +1120,20 @@ try {
     const controls = _leva.useControls({
       animate: true,
       radius: {
-        value: 4,
-        min: 0,
+        value: 1,
+        min: 1,
         max: 10,
         step: 1
       },
       speed: {
-        value: 4,
-        min: 0,
+        value: 2,
+        min: 1,
+        max: 10,
+        step: 1
+      },
+      iterations: {
+        value: 8,
+        min: 1,
         max: 10,
         step: 1
       }
@@ -1138,7 +1143,7 @@ try {
         __self: this,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 66,
+          lineNumber: 77,
           columnNumber: 10
         }
       }))
@@ -1152,7 +1157,7 @@ try {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
+      lineNumber: 80,
       columnNumber: 17
     }
   }), document.querySelector("#root"));
