@@ -8,10 +8,16 @@ import Gaussian from "../src";
 type Props = {
   radius: number;
   speed: number;
+  iterations: number;
   animate: boolean;
 };
 
-function Blur({ radius = 1, speed = 1, animate = true }: Props) {
+function Blur({
+  radius = 1,
+  iterations = 8,
+  speed = 1,
+  animate = true,
+}: Props) {
   useEffect(() => {
     const canvas = document.querySelector("canvas")!;
     canvas.width = window.innerWidth;
@@ -24,12 +30,11 @@ function Blur({ radius = 1, speed = 1, animate = true }: Props) {
     let rafId: Start;
     img.onload = () => {
       blur = new Gaussian(canvas, img);
-      blur.draw(2, radius);
+      blur.draw(iterations, radius);
       let time = 0;
       function render(dt: number) {
         time += (dt * speed) / 1000;
         const anim = Math.sin(time) * 0.5 + 0.5;
-        const iterations = 8;
         blur.draw(iterations, anim);
       }
       if (animate) {
@@ -57,6 +62,12 @@ function Demo() {
     },
     speed: {
       value: 2,
+      min: 1,
+      max: 10,
+      step: 1,
+    },
+    iterations: {
+      value: 8,
       min: 1,
       max: 10,
       step: 1,
