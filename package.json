@@ -12,7 +12,6 @@
   "dependencies": {
     "a-big-triangle": "^1.0.3",
     "array-range": "^1.0.1",
-    "baboon-image-uri": "^1.0.1",
     "canvas-loop": "^1.0.7",
     "gl-fbo": "^2.0.5",
     "gl-post": "^1.0.1",

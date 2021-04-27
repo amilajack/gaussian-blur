@@ -608,11 +608,6 @@ babel-eslint@^10.1.0:
     eslint-visitor-keys "^1.0.0"
     resolve "^1.12.0"
 
-baboon-image-uri@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/baboon-image-uri/-/baboon-image-uri-1.0.1.tgz#d22634f2b7d433af5c8d556422a13524983b1c0d"
-  integrity sha1-0iY08rfUM69cjVVkIqE1JJg7HA0=
-
 bail@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/bail/-/bail-1.0.5.tgz#b6fa133404a392cbc1f8c4bf63f5953351e7a776"
